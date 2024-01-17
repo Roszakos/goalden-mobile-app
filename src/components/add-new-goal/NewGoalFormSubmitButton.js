@@ -1,17 +1,14 @@
 import { StyleSheet, Text, View, TouchableHighlight, DeviceEventEmitter } from 'react-native';
 import React from 'react';
 
-export default function AddNewGoalButton({navigation}) {
+export default function NewGoalFormSubmitButton({navigation, submitForm}) {
   return (
     <View style={styles.buttonContainer}>
       <TouchableHighlight 
         style={styles.buttonTouchable} 
-        onPress={() => {
-            DeviceEventEmitter.emit("event.changeDrawerNavigator", { shouldBeShown: false, enableSwipe: false });
-            navigation.navigate('AddNewGoal');
-        }}>
+        onPress={() => submitForm()}>
         <View style={styles.button} >
-          <Text style={styles.buttonText}>ADD NEW GOAL</Text>
+          <Text style={styles.buttonText}>SAVE</Text>
         </View>
       </TouchableHighlight>
     </View>
@@ -39,6 +36,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFFFFF',
     fontWeight: 'bold',
-    letterSpacing: 0.5
+    letterSpacing: 0.8
   },
 })
