@@ -2,8 +2,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import React, {useState} from 'react';
 import GoalFinishDateButton from './add-new-goal/GoalFinishDateButton';
 
-export default function GoalFinishDate({updateGoalFinishDate}) {
+export default function GoalFinishDate({updateGoalFinishDate, finishDate}) {
 	const [activeButton, setActiveButton] = useState(null);
+
   return (
     <View style={styles.container}>
       <Text style={styles.labelText}>When do you want to achieve it?</Text>
@@ -33,6 +34,14 @@ export default function GoalFinishDate({updateGoalFinishDate}) {
 					bgColor="#ffa412"
 				/>
 			</View>
+			<View style={styles.chosenDateView}>
+				<Text>
+					Deadline:  
+					{
+						finishDate ? ' ' + finishDate.getDate() + '-' + (parseInt(finishDate.getMonth()) + 1) + '-' + finishDate.getFullYear() : ''
+					}
+				</Text>
+			</View>
     </View>
   )
 }
@@ -58,9 +67,9 @@ const styles = StyleSheet.create({
 			paddingHorizontal: 14,
 			paddingVertical: 5,
 		},
-		touchableWrapper: {
-			borderRadius: 16,
-			backgroundColor: 'black',
-			opacity: 0.4
+		chosenDateView: {
+			alignItems: 'flex-start',
+			paddingHorizontal: 2,
+			paddingTop: 10
 		}
 })

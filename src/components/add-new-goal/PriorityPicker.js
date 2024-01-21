@@ -1,80 +1,75 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 import React, {useState} from 'react';
-import Slider from '@react-native-community/slider';
 
 export default function PriorityPicker({goalPriority, changeGoalPriority}) {
-  const [sliderMinTintColor, setSliderMinTintColor] = useState('#db991f');
+  const [chosenPriority, setChosenPriority] = useState(goalPriority);
 
   return (
     <View style={{width: '100%'}}>
-      <View style={ styles.labelContainer }>
-        <Text style={styles.labelText}>How important is it for you?</Text>
-        <Text style={styles.labelSecondaryText}>Set the priority</Text>
-      </View>
-      <View style={styles.sliderContainer}>
-        <Text>1</Text>
-        <Slider
-          style={styles.slider}
-          minimumValue={1}
-          maximumValue={10}
-          value={5}
-          step={1}
-          minimumTrackTintColor={sliderMinTintColor}
-          maximumTrackTintColor="#fff"
-          onValueChange={(value) => {
-            changeGoalPriority(value)
-            if (value > 8) {
-              setSliderMinTintColor('red');
-            } else if (value > 6) {
-              setSliderMinTintColor('#de5f1b')
-            } else if ( value > 4) {
-              setSliderMinTintColor('#db991f')
-            } else if ( value > 2) {
-              setSliderMinTintColor('#d9b527')
-            } else {
-              setSliderMinTintColor('#d9d927')
-            }
+      <Text style={styles.labelText}>How important is it for you?</Text>
+      <View style={styles.contentContainer}>
+        <TouchableHighlight 
+          style={[styles.touchableWrapper, chosenPriority == 1 ? '' : styles.touchableInactive]}
+          onPress={() => {
+            changeGoalPriority(1);
+            setChosenPriority(1);
           }}
-          thumbTintColor="black"
-        />
-        <Text>10</Text>
-      </View>
-      <View style={styles.chosenPriorityContaniner}>
-        <Text style={styles.chosenPriorityText}>Priority: {goalPriority}</Text>
+        >
+          <View style={[styles.priorityItem, {backgroundColor: '#d4d13f'}]}>
+            <Text style={styles.priorityItemText}>A little</Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight 
+          style={[styles.touchableWrapper, chosenPriority == 2 ? '' : styles.touchableInactive]}
+          onPress={() => {
+            changeGoalPriority(2);
+            setChosenPriority(2);
+          }}
+        >
+          <View style={[styles.priorityItem, {backgroundColor: '#d4963f'}]}>
+            <Text style={styles.priorityItemText}>Medium</Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight 
+          style={[styles.touchableWrapper, chosenPriority == 3 ? '' : styles.touchableInactive]}
+          onPress={() => {
+            changeGoalPriority(3);
+            setChosenPriority(3);
+          }}
+        >
+          <View style={[styles.priorityItem, {backgroundColor: '#db3e1f'}]}>
+            <Text style={styles.priorityItemText}>Very</Text>
+          </View>
+        </TouchableHighlight>
       </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  slider: {
-    width: '85%',
-    opacity: 1,
-    height: 30,
-  },
-  labelContainer: {
-    flexDirection: 'row',
-    paddingVertical: 5,
-    gap: 4
-  },
   labelText: {
 		fontWeight: '600'
 	},
-  labelSecondaryText: {
-    fontWeight: '400',
-    color: 'gray'
+  touchableWrapper: {
+    width: '33%',
   },
-  sliderContainer: {
+  contentContainer: {
+    marginTop: 8,
     flexDirection: 'row',
-    gap: 3
+    justifyContent: 'flex-start',
+    alignItems: 'stretch'
   },
-  chosenPriorityContaniner: {
-    alignItems: 'center',
-    width: '90%',
-    paddingBottom: 10
+  priorityItem: {
+    
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
-  chosenPriorityText: {
-    fontWeight: '700',
-    letterSpacing: 0.3
+  priorityItemText: {
+    fontSize: 12,
+    textAlign: 'center'
+  },
+  touchableInactive: {
+    backgroundColor: '#000',
+    opacity: 0.4
   }
 })

@@ -35,11 +35,6 @@ export default function GoalFinishDateButton({updateGoalFinishDate, dateOption, 
 }
 
 const styles = StyleSheet.create({
-	touchablesContainer: {
-		width: '100%',
-		flexDirection: 'row',
-		gap: 6
-	},
 	button: {
 		borderRadius: 16,
 		alignItems: 'center',

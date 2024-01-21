@@ -11,8 +11,7 @@ export default function AddNewGoalScreen(props) {
 	// Form properties
 	const [goalTitle, setGoalTitle] = useState('');
 	const [goalFinishDate, setGoalFinishDate] = useState(null);
-	const [goalPriority, setGoalPriority] = useState(5);
-	const [goalDescription, setGoalDescrption] = useState('');
+	const [goalPriority, setGoalPriority] = useState(null);
 
 	const { addNewGoal, incrementNumberOfGoals } = useContext(GoalListContext);
 
@@ -21,6 +20,7 @@ export default function AddNewGoalScreen(props) {
 			addNewGoal({
 				title: goalTitle,
 				finishDate: goalFinishDate,
+				created: new Date(),
 				priority: goalPriority,
 				id: goalId
 			});
@@ -35,6 +35,7 @@ export default function AddNewGoalScreen(props) {
 					label="Name your goal" 
 					placeholder="What do you want to achieve?" 
 					value={goalTitle} 
+					inputHeight={110}
 					updateState={setGoalTitle}
 				/>
 				<View style={ styles.marginView }></View>
@@ -42,20 +43,12 @@ export default function AddNewGoalScreen(props) {
 					updateGoalFinishDate={(newDate) => {
 						setGoalFinishDate(newDate);
 					}} 
+					finishDate={goalFinishDate}
 				/>
 				<View style={ styles.marginView }></View>
 				<PriorityPicker 
 					goalPriority={goalPriority} 
 					changeGoalPriority={setGoalPriority}
-				/>
-				<View style={ styles.marginView }></View>
-				<FormTextInput 
-					label="Description"
-					labelSubtext="(optional)"
-					placeholder="Why do you want to reach it, how is it going to help you, etc." 
-					value={goalDescription} 
-					updateState={setGoalDescrption}
-					inputHeight={100}
 				/>
 			</ScrollView>
 			<NewGoalFormSubmitButton navigation={props.navigation} submitForm={submitForm}/>
