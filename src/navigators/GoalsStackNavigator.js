@@ -3,6 +3,7 @@ import AddNewGoalScreen from '../screens/goals-stack/AddNewGoalScreen'
 import { StyleSheet, DeviceEventEmitter } from 'react-native';
 import GoalListContextProvider from '../contexts/GoalListContext';
 import GoalsTabNavigator from './GoalsTabNavigator';
+import GoalViewScreen from '../screens/goals-stack/GoalViewScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,9 @@ export default function GoalsStackNavigator(props) {
           headerStyle: {
               backgroundColor: '#e86035',
             },
+            headerTitleStyle: {
+              fontSize: 22,
+            }
         }}
       >
         <Stack.Screen 
@@ -31,6 +35,14 @@ export default function GoalsStackNavigator(props) {
           component={AddNewGoalScreen} 
           options={{ 
             title: 'Set new goal',
+          }}
+        />
+        <Stack.Screen 
+          name="GoalView" 
+          component={GoalViewScreen} 
+          //options={({route}) => ({title: route.params.goal.title})}
+          options={{
+            title: ''
           }}
         />
       </Stack.Navigator>

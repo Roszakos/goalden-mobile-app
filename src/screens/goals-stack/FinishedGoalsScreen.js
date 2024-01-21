@@ -1,27 +1,17 @@
 import { StyleSheet, View, Text, ScrollView, DeviceEventEmitter } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
-import AddNewGoalButton from '../../components/AddNewGoalButton';
 import { GoalListContext } from '../../contexts/GoalListContext';
 
 export default function FinishedGoalsScreen(props) {
   const { finishedGoalList, setFinishedGoalList, getFinishedGoals } = useContext(GoalListContext);
   const [goalsStatus, setGoalsStatus] = useState('Loading...');
 
-  useEffect(() => {
-    getFinishedGoals().then((response) => {
-       setFinishedGoalList(response);
-       setGoalsStatus(response.length == 0 ?  "You haven't finished any goals yet." : "");
-     });
-  }, []);
-
-  // useEffect(() => {
-  //   console.log(goalList);
-  //   console.log('goallist')
-  // }, [goalList]);
-
   useEffect(
     () => {
+      getFinishedGoals().then((response) => {
+        setFinishedGoalList(response);
+        setGoalsStatus(response.length == 0 ?  "You haven't finished any goals yet." : "");
+      });
       props.navigation.addListener("focus", () => DeviceEventEmitter.emit('event.changeDrawerNavigator', {shouldBeShown: true, enableSwipe: true}))
     },
     []
