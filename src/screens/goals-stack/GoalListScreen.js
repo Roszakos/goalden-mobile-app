@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, ScrollView, DeviceEventEmitter, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, DeviceEventEmitter, TouchableHighlight } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import AddNewGoalButton from '../../components/AddNewGoalButton';
 import { GoalListContext } from '../../contexts/GoalListContext';
@@ -139,7 +139,7 @@ export default function GoalListScreen(props) {
                     <View style={[styles.listItemView, {backgroundColor: chooseGoalBgColor(goal.priority)}]}>
                       <View style={styles.listItemHeader}>
                         <Text style={styles.listItemText}>{goal.title}</Text>
-                        <ItemOptions goalId={goal.id}/>
+                        <ItemOptions goalId={goal.id} status="active" />
                       </View>
                       <View style={styles.listItemBottomView}>
                         <View style={styles.goalFinishDateView}>
