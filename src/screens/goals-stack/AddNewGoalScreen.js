@@ -8,24 +8,35 @@ import NewGoalFormSubmitButton from '../../components/add-new-goal/NewGoalFormSu
 
 
 export default function AddNewGoalScreen(props) {
+	let goal = null;
+	if (props.route.params.action == 'edit') {
+		goal = props.route.params.goal;
+	}
+	
 	// Form properties
-	const [goalTitle, setGoalTitle] = useState('');
-	const [goalFinishDate, setGoalFinishDate] = useState(null);
-	const [goalPriority, setGoalPriority] = useState(null);
+	const [goalTitle, setGoalTitle] = useState(goal ? goal.title : '');
+	const [goalFinishDate, setGoalFinishDate] = useState(goal ? goal.finishDate : null);
+	const [goalPriority, setGoalPriority] = useState(goal ? goal.priority : null);
 
-	const { addNewGoal, incrementNumberOfGoals } = useContext(GoalListContext);
+	const { activeGoalList, setActiveGoalList, storeActiveGoals, getNumberOfGoals, storeNumberOfGoals } = useContext(GoalListContext);
 
 	const submitForm = () => {
-		incrementNumberOfGoals().then((goalId) => {
-			addNewGoal({
-				title: goalTitle,
-				finishDate: goalFinishDate.getTime(),
-				created: Date.now(),
-				priority: goalPriority,
-				id: goalId
-			});
-			props.navigation.navigate('GoalList');
-		});
+		getNumberOfGoals().then((goalId) => {
+        storeNumberOfGoals(String(parseInt(goalId) + 1));
+        const newList = [
+					{
+						title: goalTitle,
+						finishDate: goalFinishDate.getTime(),
+						created: Date.now(),
+						priority: goalPriority,
+						id: goalId
+					},
+					 ...activeGoalList
+				];
+        setActiveGoalList(newList);
+        storeActiveGoals(newList);
+				props.navigation.navigate('GoalList');
+    });
 	}
 
   return (
