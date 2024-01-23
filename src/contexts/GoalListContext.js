@@ -10,13 +10,12 @@ export default function GoalListContextProvider({children}) {
     /** AsyncStorage functions */
 
     // clearAll = async () => {
-    // try {
-    //     await AsyncStorage.clear()
-    // } catch(e) {
-    //     // clear error
-    // }
-
-    // console.log('Done.')
+    //     try {
+    //         await AsyncStorage.clear()
+    //     } catch(e) {
+    //         console.log(e);
+    //     }
+    //     console.log('Done.')
     // }
     // clearAll();
 
@@ -78,7 +77,6 @@ export default function GoalListContextProvider({children}) {
     const incrementNumberOfGoals = async () => {
         return getNumberOfGoals().then((response) => {
             storeNumberOfGoals(String(parseInt(response) + 1));
-            console.log('num of goals: ' + response);
             return parseInt(response);
         });
     }
@@ -90,9 +88,33 @@ export default function GoalListContextProvider({children}) {
     }
 
     const markGoalAsFinished = (goalId) => {
-        getActiveGoals().then((activeGoals) => {
-            activeGoals = response
-        });
+        const goal = activeGoalList.find((element) => element.id == goalId);
+        let updatedActiveGoals = activeGoalList.slice();
+        let updatedFinishedGoals = finishedGoalList.slice();
+
+        updatedFinishedGoals.unshift(goal);
+        updatedActiveGoals.splice(updatedActiveGoals.indexOf(goal), 1);
+
+        setActiveGoalList(updatedActiveGoals);
+        setFinishedGoalList(updatedFinishedGoals);
+
+        storeActiveGoals(updatedActiveGoals);
+        storeFinishedGoals(updatedFinishedGoals);
+    }
+
+    const markGoalAsActive = (goalId) => {
+        const goal = finishedGoalList.find((element) => element.id == goalId);
+        let updatedActiveGoals = activeGoalList.slice();
+        let updatedFinishedGoals = finishedGoalList.slice();
+
+        updatedActiveGoals.unshift(goal);
+        updatedFinishedGoals.splice(updatedFinishedGoals.indexOf(goal), 1);
+
+        setActiveGoalList(updatedActiveGoals);
+        setFinishedGoalList(updatedFinishedGoals);
+
+        storeActiveGoals(updatedActiveGoals);
+        storeFinishedGoals(updatedFinishedGoals);
     }
 
     return (
@@ -100,7 +122,7 @@ export default function GoalListContextProvider({children}) {
             value={{ 
                 activeGoalList, setActiveGoalList, getActiveGoals, 
                 finishedGoalList, setFinishedGoalList, getFinishedGoals, 
-                addNewGoal, incrementNumberOfGoals 
+                addNewGoal, incrementNumberOfGoals, markGoalAsFinished, markGoalAsActive
             }}
         >
             {children}
