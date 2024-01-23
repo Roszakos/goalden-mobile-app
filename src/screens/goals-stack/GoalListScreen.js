@@ -20,12 +20,15 @@ export default function GoalListScreen(props) {
     () => {
       getActiveGoals().then((response) => {
         setActiveGoalList(response);
-        setGoalsStatus(response.length == 0 ? "You have no active goals." : "");
       });
       props.navigation.addListener("focus", () => DeviceEventEmitter.emit('event.changeDrawerNavigator', {shouldBeShown: true, enableSwipe: true}))
     },
     []
   );
+
+  useEffect(() => {
+    setGoalsStatus(activeGoalList.length == 0 ? "You have no active goals." : "");
+  }, [activeGoalList])
 
   const calculateDate = (finishDate) => {
     if (finishDate) {

@@ -18,14 +18,17 @@ export default function FinishedGoalsScreen(props) {
     () => {
       getFinishedGoals().then((response) => {
         setFinishedGoalList(response);
-        setGoalsStatus(response.length == 0 ?  "You haven't finished any goals yet." : "");
       });
       props.navigation.addListener("focus", () => DeviceEventEmitter.emit('event.changeDrawerNavigator', {shouldBeShown: true, enableSwipe: true}))
     },
     []
   );
 
-    const calculateDate = (finishDate) => {
+  useEffect(() => {
+    setGoalsStatus(finishedGoalList.length == 0 ? "You haven't finished any goals yet." : "");
+  }, [finishedGoalList])
+
+  const calculateDate = (finishDate) => {
     if (finishDate) {
       finishDate = new Date(finishDate);
       const finishDateNoHours = new Date(finishDate.getFullYear(), finishDate.getMonth(), finishDate.getDate());
