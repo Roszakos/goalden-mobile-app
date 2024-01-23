@@ -72,57 +72,13 @@ export default function GoalListContextProvider({children}) {
         }
     }
     /** AsyncStorage functions */
-    
-    // Context functions
-    const incrementNumberOfGoals = async () => {
-        return getNumberOfGoals().then((response) => {
-            storeNumberOfGoals(String(parseInt(response) + 1));
-            return parseInt(response);
-        });
-    }
-
-    const addNewGoal = (goal) => {
-        const newList = [goal, ...activeGoalList];
-        setActiveGoalList(newList);
-        storeActiveGoals(newList);
-    }
-
-    const markGoalAsFinished = (goalId) => {
-        const goal = activeGoalList.find((element) => element.id == goalId);
-        let updatedActiveGoals = activeGoalList.slice();
-        let updatedFinishedGoals = finishedGoalList.slice();
-
-        updatedFinishedGoals.unshift(goal);
-        updatedActiveGoals.splice(updatedActiveGoals.indexOf(goal), 1);
-
-        setActiveGoalList(updatedActiveGoals);
-        setFinishedGoalList(updatedFinishedGoals);
-
-        storeActiveGoals(updatedActiveGoals);
-        storeFinishedGoals(updatedFinishedGoals);
-    }
-
-    const markGoalAsActive = (goalId) => {
-        const goal = finishedGoalList.find((element) => element.id == goalId);
-        let updatedActiveGoals = activeGoalList.slice();
-        let updatedFinishedGoals = finishedGoalList.slice();
-
-        updatedActiveGoals.unshift(goal);
-        updatedFinishedGoals.splice(updatedFinishedGoals.indexOf(goal), 1);
-
-        setActiveGoalList(updatedActiveGoals);
-        setFinishedGoalList(updatedFinishedGoals);
-
-        storeActiveGoals(updatedActiveGoals);
-        storeFinishedGoals(updatedFinishedGoals);
-    }
 
     return (
         <GoalListContext.Provider 
             value={{ 
-                activeGoalList, setActiveGoalList, getActiveGoals, 
-                finishedGoalList, setFinishedGoalList, getFinishedGoals, 
-                addNewGoal, incrementNumberOfGoals, markGoalAsFinished, markGoalAsActive
+                activeGoalList, setActiveGoalList, getActiveGoals, storeActiveGoals, 
+                finishedGoalList, setFinishedGoalList, getFinishedGoals, storeFinishedGoals,
+                getNumberOfGoals, storeNumberOfGoals
             }}
         >
             {children}
