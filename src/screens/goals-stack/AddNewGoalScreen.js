@@ -19,8 +19,8 @@ export default function AddNewGoalScreen(props) {
 		incrementNumberOfGoals().then((goalId) => {
 			addNewGoal({
 				title: goalTitle,
-				finishDate: goalFinishDate,
-				created: new Date(),
+				finishDate: goalFinishDate.getTime(),
+				created: Date.now(),
 				priority: goalPriority,
 				id: goalId
 			});
