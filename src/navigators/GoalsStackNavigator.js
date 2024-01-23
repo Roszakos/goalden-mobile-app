@@ -40,7 +40,6 @@ export default function GoalsStackNavigator(props) {
         <Stack.Screen 
           name="GoalView" 
           component={GoalViewScreen} 
-          //options={({route}) => ({title: route.params.goal.title})}
           options={{
             title: ''
           }}

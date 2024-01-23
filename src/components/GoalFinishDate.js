@@ -5,6 +5,8 @@ import GoalFinishDateButton from './add-new-goal/GoalFinishDateButton';
 export default function GoalFinishDate({updateGoalFinishDate, finishDate}) {
 	const [activeButton, setActiveButton] = useState(null);
 
+	finishDate = finishDate ? new Date(finishDate) : null;
+
   return (
     <View style={styles.container}>
       <Text style={styles.labelText}>When do you want to achieve it?</Text>
