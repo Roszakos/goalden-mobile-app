@@ -70,6 +70,6 @@ const styles = StyleSheet.create({
   },
   touchableInactive: {
     backgroundColor: '#000',
-    opacity: 0.4
+    opacity: 0.3
   }
 })

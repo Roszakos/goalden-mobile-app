@@ -1,47 +1,68 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React, {useState} from 'react';
 import GoalFinishDateButton from './add-new-goal/GoalFinishDateButton';
+import DateDisplay from './DateDisplay';
 
 export default function GoalFinishDate({updateGoalFinishDate, finishDate}) {
 	const [activeButton, setActiveButton] = useState(null);
 
 	finishDate = finishDate ? new Date(finishDate) : null;
 
+	const changeDateOption = (option) => {
+		setActiveButton(option);
+		updateGoalFinishDate(getFinishDate(option));
+	}
+
+	const getFinishDate = (dateOption) => {
+		let finishDate;
+		const today = new Date();
+		switch (dateOption) {
+			case 1:
+				const daysToAdd = 8 - today.getDay();
+				finishDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysToAdd, 1);
+				break;
+			case 2:
+				finishDate = new Date(today.getFullYear(), today.getMonth() + 1, 1, 1);
+				break;
+			case 3:
+				finishDate = new Date(today.getFullYear() + 1, 0, 1, 1);
+				break;
+			default:
+				break;
+		}
+		return finishDate;
+	}
+
   return (
     <View style={styles.container}>
       <Text style={styles.labelText}>When do you want to achieve it?</Text>
 			<View style={styles.touchablesContainer}>
 				<GoalFinishDateButton 
-					updateGoalFinishDate={updateGoalFinishDate} 
 					label="This week" 
 					dateOption={1} 
 					isActive={activeButton === 1}
-					setToActive={setActiveButton}
 					bgColor="#f0761f"
+					changeDateOption={changeDateOption}
 				/>
 				<GoalFinishDateButton 
-					updateGoalFinishDate={updateGoalFinishDate} 
 					label="This month" 
 					dateOption={2} 
 					isActive={activeButton === 2}
-					setToActive={setActiveButton}
 					bgColor="#8dc223"
+					changeDateOption={changeDateOption}
 				/>
 				<GoalFinishDateButton 
-					updateGoalFinishDate={updateGoalFinishDate} 
 					label="This year" 
 					dateOption={3} 
 					isActive={activeButton === 3}
-					setToActive={setActiveButton}
 					bgColor="#ffa412"
+					changeDateOption={changeDateOption}
 				/>
 			</View>
 			<View style={styles.chosenDateView}>
 				<Text>
-					Deadline:  
-					{
-						finishDate ? ' ' + finishDate.getDate() + '-' + (parseInt(finishDate.getMonth()) + 1) + '-' + finishDate.getFullYear() : ''
-					}
+					{ 'Deadline: ' }
+					<DateDisplay date={finishDate} />
 				</Text>
 			</View>
     </View>
@@ -60,7 +81,8 @@ const styles = StyleSheet.create({
 		touchablesContainer: {
 			width: '100%',
 			flexDirection: 'row',
-			gap: 6
+			gap: 6,
+			flexWrap: 'wrap',
 		},
 		button: {
 			borderRadius: 16,
