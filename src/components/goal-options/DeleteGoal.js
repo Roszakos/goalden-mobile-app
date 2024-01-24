@@ -26,7 +26,7 @@ export default function DeleteGoal({goalId, status, optionsItemTextStyle}) {
   }
 
   return (
-    <TouchableHighlight onPress={() => {
+    <TouchableHighlight underlayColor="rgba(0, 0, 0, 0.4)" onPress={() => {
       deleteGoal(goalId, status);
     }}>
       <Text style={[optionsItemTextStyle, {color: 'red'}]}>

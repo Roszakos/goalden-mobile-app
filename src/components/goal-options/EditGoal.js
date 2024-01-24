@@ -15,11 +15,11 @@ export default function EditGoal({goalId, status, optionsItemTextStyle}) {
       goal = finishedGoalList.find((element) => element.id == goalId);
     }
     DeviceEventEmitter.emit("event.changeDrawerNavigator", { shouldBeShown: false, enableSwipe: false });
-    navigation.navigate('AddNewGoal', {goal: goal, action: 'edit'});
+    navigation.navigate('AddNewGoal', {goal: goal, action: 'edit', headerTitle: 'Edit goal'});
   }
   
   return (
-    <TouchableHighlight onPress={() => {
+    <TouchableHighlight underlayColor="rgba(0, 0, 0, 0.4)" onPress={() => {
       editGoal(goalId, status);
     }}>
       <Text style={optionsItemTextStyle}>

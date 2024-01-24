@@ -42,7 +42,7 @@ export default function ToggleGoalStatus({goalId, status, optionsItemTextStyle})
     }
 
   return (
-    <TouchableHighlight onPress={() => {
+    <TouchableHighlight underlayColor="rgba(0, 0, 0, 0.4)" onPress={() => {
       if (status == "active") {
         markGoalAsFinished(goalId);
       } else if (status == "finished") {
