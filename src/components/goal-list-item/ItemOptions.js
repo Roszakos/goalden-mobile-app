@@ -1,4 +1,4 @@
-import { StyleSheet, View} from 'react-native'
+import { StyleSheet, View, DeviceEventEmitter} from 'react-native'
 import React, { useState } from 'react'
 import ItemOptionsButton from '../../components/goal-list-item/ItemOptionsButton';
 import ToggleGoalStatus from '../goal-options/ToggleGoalStatus';
@@ -8,8 +8,18 @@ import DeleteGoal from '../goal-options/DeleteGoal';
 export default function ItemOptions({goalId, status}) {
   const [showOptions, setShowOptions] = useState(false);
 
+  DeviceEventEmitter.addListener("event.hideOptions", () =>  {
+		setShowOptions(false);
+	});
+
   const toggleOptions = () => {
-    setShowOptions(! showOptions);
+    if (showOptions) {
+      setShowOptions(false);
+    } else {
+      DeviceEventEmitter.emit("event.hideOptions");
+      setShowOptions(true);
+    }
+    
   }
 
   return (
@@ -33,8 +43,8 @@ const styles = StyleSheet.create({
   optionsContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     position: 'absolute',
-    alignItems: 'flex-end',
-    alignContent: 'stretch',
+    alignItems: 'stretch',
+    flex: 1,
     top: 5,
     right: 25,
     zIndex: 10
@@ -44,5 +54,6 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     fontSize: 13,
     color: '#fff',
+    alignSelf: 'flex-end'
   }
 })

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import AddNewGoalButton from '../../components/AddNewGoalButton';
 import { GoalListContext } from '../../contexts/GoalListContext';
 import ItemOptions from '../../components/goal-list-item/ItemOptions';
+import DateDisplay from '../../components/DateDisplay';
 
 
 export default function GoalListScreen(props) {
@@ -22,6 +23,7 @@ export default function GoalListScreen(props) {
         setActiveGoalList(response);
       });
       props.navigation.addListener("focus", () => DeviceEventEmitter.emit('event.changeDrawerNavigator', {shouldBeShown: true, enableSwipe: true}))
+      props.navigation.addListener("blur", () => DeviceEventEmitter.emit('event.hideOptions'))
     },
     []
   );
@@ -115,7 +117,10 @@ export default function GoalListScreen(props) {
   }
 
   return (
-    <View style={styles.outerContainer}>
+    <View 
+      style={styles.outerContainer}
+      onStartShouldSetResponder={() => DeviceEventEmitter.emit("event.hideOptions")}
+    >
       <ScrollView contentContainerStyle={styles.container}>
         {
           activeGoalList.length ? (
@@ -128,8 +133,9 @@ export default function GoalListScreen(props) {
                     </Text>
                     <Text style={styles.headerText}>
                       {
-                        goal.created ? 'Created ' + displayCreationDate(goal.created) : ''
+                        goal.created ? 'Created ' : ''
                       }
+                      <DateDisplay date={goal.created} />
                     </Text>
                   </View>
                   <TouchableHighlight 
