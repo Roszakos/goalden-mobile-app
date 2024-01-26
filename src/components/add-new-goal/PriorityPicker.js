@@ -26,7 +26,7 @@ export default function PriorityPicker({goalPriority, changeGoalPriority}) {
             setChosenPriority(2);
           }}
         >
-          <View style={[styles.priorityItem, {backgroundColor: '#d4963f'}]}>
+          <View style={[styles.priorityItem, {backgroundColor: '#e0890d'}]}>
             <Text style={styles.priorityItemText}>Medium</Text>
           </View>
         </TouchableHighlight>
