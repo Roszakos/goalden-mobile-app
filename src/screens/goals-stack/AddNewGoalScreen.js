@@ -5,6 +5,7 @@ import GoalFinishDate from '../../components/GoalFinishDate';
 import { GoalListContext } from '../../contexts/GoalListContext';
 import PriorityPicker from '../../components/add-new-goal/PriorityPicker';
 import NewGoalFormSubmitButton from '../../components/add-new-goal/NewGoalFormSubmitButton';
+import GoalReachCheckbox from '../../components/add-new-goal/GoalReachCheckbox';
 
 
 export default function AddNewGoalScreen(props) {
@@ -17,6 +18,7 @@ export default function AddNewGoalScreen(props) {
 	const [goalTitle, setGoalTitle] = useState(goal ? goal.title : '');
 	const [goalFinishDate, setGoalFinishDate] = useState(goal ? goal.finishDate : null);
 	const [goalPriority, setGoalPriority] = useState(goal ? goal.priority : null);
+	const [isFinished, setIsFinished] = useState(goal ? goal.isFinished : false);
 
 	const { activeGoalList, setActiveGoalList, storeActiveGoals, getNumberOfGoals, storeNumberOfGoals } = useContext(GoalListContext);
 
@@ -61,6 +63,10 @@ export default function AddNewGoalScreen(props) {
 					goalPriority={goalPriority} 
 					changeGoalPriority={setGoalPriority}
 				/>
+				<View style={ styles.marginView }></View>
+				{
+					props.route.params.action == 'edit' ? <GoalReachCheckbox isFinished={isFinished} toggleFinished={setIsFinished} /> : null
+				}
 			</ScrollView>
 			<NewGoalFormSubmitButton navigation={props.navigation} submitForm={submitForm}/>
 		</View>

@@ -11,8 +11,10 @@ export default function EditGoal({goalId, status, optionsItemTextStyle}) {
     let goal;
     if (status == "active") {
       goal = activeGoalList.find((element) => element.id == goalId);
+      goal.isFinished = false
     } else if (status == "finished") {
       goal = finishedGoalList.find((element) => element.id == goalId);
+      goal.isFinished = true
     }
     DeviceEventEmitter.emit("event.changeDrawerNavigator", { shouldBeShown: false, enableSwipe: false });
     navigation.navigate('AddNewGoal', {goal: goal, action: 'edit', headerTitle: 'Edit goal'});
