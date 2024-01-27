@@ -7,8 +7,8 @@ export default function AddNewGoalButton({navigation}) {
       <TouchableHighlight 
         style={styles.buttonTouchable} 
         onPress={() => {
-            DeviceEventEmitter.emit("event.changeDrawerNavigator", { shouldBeShown: false, enableSwipe: false });
-            navigation.navigate('AddNewGoal', {action: 'create', headerTitle: 'Set new goal'});
+          DeviceEventEmitter.emit("event.changeDrawerNavigator", { shouldBeShown: false, enableSwipe: false });
+          navigation.navigate('AddNewGoal', {action: 'create', headerTitle: 'Set new goal'});
         }}>
         <View style={styles.button} >
           <Text style={styles.buttonText}>ADD NEW GOAL</Text>

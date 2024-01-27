@@ -2,17 +2,12 @@ import { StyleSheet, View, Text, ScrollView, DeviceEventEmitter, TouchableHighli
 import React, { useContext, useEffect, useState } from 'react';
 import { GoalListContext } from '../../contexts/GoalListContext';
 import ItemOptions from '../../components/goal-list-item/ItemOptions';
+import DateDisplay from '../../components/DateDisplay';
+import { calculateDate, chooseGoalBgColor, displayPriority, chooseHeaderBgColor } from '../../scripts/goalItemScripts';
 
 export default function FinishedGoalsScreen(props) {
   const { finishedGoalList, setFinishedGoalList, getFinishedGoals } = useContext(GoalListContext);
   const [goalsStatus, setGoalsStatus] = useState('Loading...');
-
-  // calculateDate() helper constants
-  const TODAY = new Date();
-  const DAYS_TO_ADD = 8 - TODAY.getDay();
-	const END_OF_WEEK = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + DAYS_TO_ADD, 1);
-  const END_OF_MONTH = new Date(TODAY.getFullYear(), TODAY.getMonth() + 1, 1, 1);
-  const END_OF_YEAR = new Date(TODAY.getFullYear() + 1, 0, 1, 1);
 
   useEffect(
     () => {
@@ -28,90 +23,6 @@ export default function FinishedGoalsScreen(props) {
   useEffect(() => {
     setGoalsStatus(finishedGoalList.length == 0 ? "You haven't finished any goals yet." : "");
   }, [finishedGoalList])
-
-  const calculateDate = (finishDate) => {
-    if (finishDate) {
-      finishDate = new Date(finishDate);
-      const finishDateNoHours = new Date(finishDate.getFullYear(), finishDate.getMonth(), finishDate.getDate());
-      const todayNoHours = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
-      if (finishDateNoHours < todayNoHours) {
-        return 'time\'s up';
-      } else if (finishDateNoHours == todayNoHours) {
-        return 'today';
-      } else if (finishDate <= END_OF_WEEK) {
-        return 'this week';
-      } else if (finishDate <= END_OF_MONTH) {
-        return 'this month';
-      } else if (finishDate <= END_OF_YEAR) {
-        return 'this year';
-      }
-    }
-    return 'date not specified';
-  }
-
-  const displayCreationDate = (createdAt) => {
-    if (createdAt) {
-      const creationDate = new Date(createdAt);
-      let day = creationDate.getDate() < 10 ? '0' + creationDate.getDate() : creationDate.getDate();
-      let month = (creationDate.getMonth() + 1) < 10 ? '0' + (parseInt(creationDate.getMonth()) + 1) : (parseInt(creationDate.getMonth()) + 1);
-      return day + '-' + month + '-' + creationDate.getFullYear();
-    }
-    return 'date not specified';
-  }
-
-  const chooseGoalBgColor = (priority) => {
-    let bgColor = 'gray';
-    switch (priority) {
-      case 1:
-        bgColor = '#d4d13f'
-        break;
-      case 2:
-        bgColor = '#d4963f'
-        break;
-      case 3:
-        bgColor = '#db3e1f'
-        break;
-      default:
-        break;
-    }
-    return bgColor;
-  }
-
-  const chooseHeaderBgColor = (priority) => {
-    let bgColor = 'gray';
-    switch (priority) {
-      case 1:
-        bgColor = '#d4c03f';
-        break;
-      case 2:
-        bgColor = '#d4853f';
-        break;
-      case 3:
-        bgColor = '#cf2219';
-        break;
-      default:
-        break;
-    }
-    return bgColor;
-  }
-
-  const displayPriority = (priority) => {
-    let textPriority = 'Not specified';
-    switch (priority) {
-      case 1:
-        textPriority = 'Low';
-        break;
-      case 2:
-        textPriority = 'Medium';
-        break;
-      case 3:
-        textPriority = 'High';
-        break;
-      default:
-        break;
-    }
-    return textPriority;
-  }
 
   return (
     <View 
@@ -130,8 +41,9 @@ export default function FinishedGoalsScreen(props) {
                     </Text>
                     <Text style={styles.headerText}>
                       {
-                        goal.created ? 'Created ' + displayCreationDate(goal.created) : ''
+                        goal.created ? 'Created ' : ''
                       }
+                      <DateDisplay date={goal.created} />
                     </Text>
                   </View>
                   <TouchableHighlight 
