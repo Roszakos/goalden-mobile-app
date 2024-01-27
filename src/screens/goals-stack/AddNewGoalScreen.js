@@ -16,14 +16,102 @@ export default function AddNewGoalScreen(props) {
 	
 	// Form properties
 	const [goalTitle, setGoalTitle] = useState(goal ? goal.title : '');
-	const [goalFinishDate, setGoalFinishDate] = useState(goal ? goal.finishDate : null);
+	const [goalFinishDate, setGoalFinishDate] = useState(goal ? new Date(goal.finishDate) : null);
 	const [goalPriority, setGoalPriority] = useState(goal ? goal.priority : null);
 	const [isFinished, setIsFinished] = useState(goal ? goal.isFinished : false);
 
-	const { activeGoalList, setActiveGoalList, storeActiveGoals, getNumberOfGoals, storeNumberOfGoals } = useContext(GoalListContext);
+	const { 
+		activeGoalList, setActiveGoalList, storeActiveGoals, 
+		finishedGoalList, storeFinishedGoals, setFinishedGoalList,
+		getNumberOfGoals, storeNumberOfGoals
+	} = useContext(GoalListContext);
 
 	const submitForm = () => {
-		getNumberOfGoals().then((goalId) => {
+		if (props.route.params.action == 'edit') {
+			if (goal.isFinished) {
+				if (isFinished) {
+					let updatedFinishedGoals = finishedGoalList.slice();
+					let editedGoalIndex = updatedFinishedGoals.indexOf(
+						updatedFinishedGoals.find((element) => element.id == goal.id)
+					)
+					updatedFinishedGoals[editedGoalIndex] = {
+						title: goalTitle,
+						finishDate: goalFinishDate.getTime(),
+						created: goal.created,
+						priority: goalPriority,
+						id: goal.id
+					}
+					setFinishedGoalList(updatedFinishedGoals);
+					storeFinishedGoals(updatedFinishedGoals);
+					props.navigation.navigate('FinishedGoals');
+				} else {
+					let updatedFinishedGoals = finishedGoalList.slice();
+					let updatedActiveGoals = activeGoalList.slice();
+
+					let editedGoalIndex = updatedFinishedGoals.indexOf(
+						updatedFinishedGoals.find((element) => element.id == goal.id)
+					)
+					updatedFinishedGoals.splice(editedGoalIndex, 1);
+
+					updatedActiveGoals.unshift({
+						title: goalTitle,
+						finishDate: goalFinishDate.getTime(),
+						created: goal.created,
+						priority: goalPriority,
+						id: goal.id
+					});
+
+					setFinishedGoalList(updatedFinishedGoals);
+					storeFinishedGoals(updatedFinishedGoals);
+					setActiveGoalList(updatedActiveGoals);
+					storeActiveGoals(updatedActiveGoals);
+
+					props.navigation.navigate('ActiveGoals');
+				}
+			} else {
+				if (isFinished) {
+					let updatedFinishedGoals = finishedGoalList.slice();
+					let updatedActiveGoals = activeGoalList.slice();
+
+					let editedGoalIndex = updatedActiveGoals.indexOf(
+						updatedActiveGoals.find((element) => element.id == goal.id)
+					)
+					updatedActiveGoals.splice(editedGoalIndex, 1);
+
+					updatedFinishedGoals.unshift({
+						title: goalTitle,
+						finishDate: goalFinishDate.getTime(),
+						created: goal.created,
+						priority: goalPriority,
+						id: goal.id
+					});
+
+					setFinishedGoalList(updatedFinishedGoals);
+					storeFinishedGoals(updatedFinishedGoals);
+					setActiveGoalList(updatedActiveGoals);
+					storeActiveGoals(updatedActiveGoals);
+					
+					props.navigation.navigate('FinishedGoals');
+				} else {
+					let updatedActiveGoals = activeGoalList.slice();
+					let editedGoalIndex = updatedActiveGoals.indexOf(
+						updatedActiveGoals.find((element) => element.id == goal.id)
+					)
+					updatedActiveGoals[editedGoalIndex] = {
+						title: goalTitle,
+						finishDate: goalFinishDate.getTime(),
+						created: goal.created,
+						priority: goalPriority,
+						id: goal.id
+					}
+					setActiveGoalList(updatedActiveGoals);
+					storeActiveGoals(updatedActiveGoals);
+
+					props.navigation.navigate('ActiveGoals');
+				}
+			}
+		} else {
+			getNumberOfGoals().then((goalId) => {
         storeNumberOfGoals(String(parseInt(goalId) + 1));
         const newList = [
 					{
@@ -37,8 +125,9 @@ export default function AddNewGoalScreen(props) {
 				];
         setActiveGoalList(newList);
         storeActiveGoals(newList);
-				props.navigation.navigate('GoalList');
-    });
+   	  });
+			props.navigation.navigate('ActiveGoals');
+		}
 	}
 
   return (
