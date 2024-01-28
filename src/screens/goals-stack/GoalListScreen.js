@@ -1,15 +1,22 @@
 import { StyleSheet, View, Text, ScrollView, DeviceEventEmitter, TouchableHighlight } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import AddNewGoalButton from '../../components/AddNewGoalButton';
-import { GoalListContext } from '../../contexts/GoalListContext';
 import ItemOptions from '../../components/goal-list-item/ItemOptions';
 import DateDisplay from '../../components/DateDisplay';
+import { GoalListContext } from '../../contexts/GoalListContext';
+import { GoalListGroupContext } from '../../contexts/GoalListGroupContext';
 import { calculateDate, chooseGoalBgColor, displayPriority, chooseHeaderBgColor } from '../../scripts/goalItemScripts';
+
+const changeGoalsGroup = (group) => {
+  setShowGoalsGroup(group);
+}
 
 
 export default function GoalListScreen(props) {
   const { activeGoalList, setActiveGoalList, getActiveGoals } = useContext(GoalListContext);
+  const { currentGroup } = useContext(GoalListGroupContext);
   const [goalsStatus, setGoalsStatus] = useState('Loading...');
+  const [showGoalsGroup, setShowGoalsGroup] = useState(2);
 
   useEffect(
     () => {
@@ -21,9 +28,12 @@ export default function GoalListScreen(props) {
     },
     []
   );
-
+  
   useEffect(() => {
     setGoalsStatus(activeGoalList.length == 0 ? "You have no active goals." : "");
+    props.navigation.setOptions({
+        headerRight: () => <Text>XD</Text>
+      })
   }, [activeGoalList])
 
   return (
@@ -35,58 +45,61 @@ export default function GoalListScreen(props) {
         {
           activeGoalList.length ? (
             activeGoalList.map((goal) => {
-              return (
-                <View style={styles.listItemContainerView} key={goal.id}>
-                  <View style={[styles.headerView, {backgroundColor: chooseHeaderBgColor(goal.priority)}]}>
-                    <Text style={styles.headerText}>
-                      GOAL
-                    </Text>
-                    <Text style={styles.headerText}>
-                      {
-                        goal.created ? 'Created ' : ''
-                      }
-                      <DateDisplay date={goal.created} />
-                    </Text>
-                  </View>
-                  <TouchableHighlight 
-                    onPress={() => {
-                      DeviceEventEmitter.emit("event.changeDrawerNavigator", { shouldBeShown: false, enableSwipe: false });
-                      props.navigation.navigate("GoalView", {goal: goal, title: goal.title});
-                    }}
-                    style={styles.listItemTouchable} 
-                  >
-                    <View style={[styles.listItemView, {backgroundColor: chooseGoalBgColor(goal.priority)}]}>
-                      <View style={styles.listItemHeader}>
-                        <Text style={styles.listItemText}>{goal.title}</Text>
-                        <ItemOptions goalId={goal.id} status="active" />
-                      </View>
-                      <View style={styles.listItemBottomView}>
-                        <View style={styles.goalFinishDateView}>
-                          <Text style={styles.goalDetailsHeader}>
-                            DEADLINE
-                          </Text>
-                          <Text style={styles.goalDetailsText}>
-                            {
-                              goal.finishDate ? calculateDate(goal.finishDate) : ''
-                            }
-                          </Text>
-                        </View>
-
-                        <View style={styles.goalFinishDateView}>
-                          <Text style={styles.goalDetailsHeader}>
-                            PRIORITY
-                          </Text>
-                          <Text style={styles.goalDetailsText}>
-                            {
-                              displayPriority(goal.priority)
-                            }
-                          </Text>
-                        </View>
-                      </View>
+              if (currentGroup === 0 || goal.priority == currentGroup)
+              {
+                return (
+                  <View style={styles.listItemContainerView} key={goal.id}>
+                    <View style={[styles.headerView, {backgroundColor: chooseHeaderBgColor(goal.priority)}]}>
+                      <Text style={styles.headerText}>
+                        GOAL
+                      </Text>
+                      <Text style={styles.headerText}>
+                        {
+                          goal.created ? 'Created ' : ''
+                        }
+                        <DateDisplay date={goal.created} />
+                      </Text>
                     </View>
-                  </TouchableHighlight>
-                </View>
-              )
+                    <TouchableHighlight 
+                      onPress={() => {
+                        DeviceEventEmitter.emit("event.changeDrawerNavigator", { shouldBeShown: false, enableSwipe: false });
+                        props.navigation.navigate("GoalView", {goal: goal, title: goal.title});
+                      }}
+                      style={styles.listItemTouchable} 
+                    >
+                      <View style={[styles.listItemView, {backgroundColor: chooseGoalBgColor(goal.priority)}]}>
+                        <View style={styles.listItemHeader}>
+                          <Text style={styles.listItemText}>{goal.title}</Text>
+                          <ItemOptions goalId={goal.id} status="active" />
+                        </View>
+                        <View style={styles.listItemBottomView}>
+                          <View style={styles.goalFinishDateView}>
+                            <Text style={styles.goalDetailsHeader}>
+                              DEADLINE
+                            </Text>
+                            <Text style={styles.goalDetailsText}>
+                              {
+                                goal.finishDate ? calculateDate(goal.finishDate) : ''
+                              }
+                            </Text>
+                          </View>
+
+                          <View style={styles.goalFinishDateView}>
+                            <Text style={styles.goalDetailsHeader}>
+                              PRIORITY
+                            </Text>
+                            <Text style={styles.goalDetailsText}>
+                              {
+                                displayPriority(goal.priority)
+                              }
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableHighlight>
+                  </View>
+                )
+              }
             })
           ) : (
             <Text>{goalsStatus}</Text>
