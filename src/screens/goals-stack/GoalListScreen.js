@@ -16,7 +16,6 @@ export default function GoalListScreen(props) {
   const { activeGoalList, setActiveGoalList, getActiveGoals } = useContext(GoalListContext);
   const { currentGroup } = useContext(GoalListGroupContext);
   const [goalsStatus, setGoalsStatus] = useState('Loading...');
-  const [showGoalsGroup, setShowGoalsGroup] = useState(2);
 
   useEffect(
     () => {
