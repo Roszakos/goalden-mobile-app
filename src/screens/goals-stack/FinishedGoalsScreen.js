@@ -9,12 +9,23 @@ import { calculateDate, chooseGoalBgColor, displayPriority, chooseHeaderBgColor 
 export default function FinishedGoalsScreen(props) {
   const { finishedGoalList, setFinishedGoalList, getFinishedGoals } = useContext(GoalListContext);
   const { currentGroup } = useContext(GoalListGroupContext);
+
+  const [goalList, setGoalList] = useState([]);
   const [goalsStatus, setGoalsStatus] = useState('Loading...');
 
   useEffect(
     () => {
       getFinishedGoals().then((response) => {
+          response.sort((a, b) => {
+            if (a.finishDate < b.finishDate) {
+              return -1;
+            } else if (b.finishDate < a.finishDate) {
+              return 1;
+            }
+            return 0;
+          })
         setFinishedGoalList(response);
+        setGoalList(response);
       });
       props.navigation.addListener("focus", () => DeviceEventEmitter.emit('event.changeDrawerNavigator', {shouldBeShown: true, enableSwipe: true}))
       props.navigation.addListener("blur", () => DeviceEventEmitter.emit('event.hideOptions'))
@@ -24,6 +35,17 @@ export default function FinishedGoalsScreen(props) {
 
   useEffect(() => {
     setGoalsStatus(finishedGoalList.length == 0 ? "You haven't finished any goals yet." : "");
+    const sortedFinishedGoalList = finishedGoalList.slice();
+    sortedFinishedGoalList.sort((a, b) => {
+      if (a.finishDate < b.finishDate) {
+        return -1;
+      } else if (b.finishDate < a.finishDate) {
+        return 1;
+      }
+      return 0;
+    });
+
+    setGoalList(sortedFinishedGoalList);
   }, [finishedGoalList])
 
   return (
@@ -33,8 +55,8 @@ export default function FinishedGoalsScreen(props) {
     >
       <ScrollView contentContainerStyle={styles.container}>
         {
-          finishedGoalList.length ? (
-            finishedGoalList.map((goal) => {
+          goalList.length ? (
+            goalList.map((goal) => {
               if (currentGroup === 0 || goal.priority == currentGroup)
               {
                 return (

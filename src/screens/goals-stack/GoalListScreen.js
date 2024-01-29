@@ -7,20 +7,26 @@ import { GoalListContext } from '../../contexts/GoalListContext';
 import { GoalListGroupContext } from '../../contexts/GoalListGroupContext';
 import { calculateDate, chooseGoalBgColor, displayPriority, chooseHeaderBgColor } from '../../scripts/goalItemScripts';
 
-const changeGoalsGroup = (group) => {
-  setShowGoalsGroup(group);
-}
-
-
 export default function GoalListScreen(props) {
   const { activeGoalList, setActiveGoalList, getActiveGoals } = useContext(GoalListContext);
   const { currentGroup } = useContext(GoalListGroupContext);
+
+  const [goalList, setGoalList] = useState([]);
   const [goalsStatus, setGoalsStatus] = useState('Loading...');
 
   useEffect(
     () => {
       getActiveGoals().then((response) => {
+        response.sort((a, b) => {
+          if (a.finishDate < b.finishDate) {
+            return -1;
+          } else if (b.finishDate < a.finishDate) {
+            return 1;
+          }
+          return 0;
+        })
         setActiveGoalList(response);
+        setGoalList(response);
       });
       props.navigation.addListener("focus", () => DeviceEventEmitter.emit('event.changeDrawerNavigator', {shouldBeShown: true, enableSwipe: true}))
       props.navigation.addListener("blur", () => DeviceEventEmitter.emit('event.hideOptions'))
@@ -30,9 +36,17 @@ export default function GoalListScreen(props) {
   
   useEffect(() => {
     setGoalsStatus(activeGoalList.length == 0 ? "You have no active goals." : "");
-    props.navigation.setOptions({
-        headerRight: () => <Text>XD</Text>
-      })
+    const sortedActiveGoalList = activeGoalList.slice();
+    sortedActiveGoalList.sort((a, b) => {
+      if (a.finishDate < b.finishDate) {
+        return -1;
+      } else if (b.finishDate < a.finishDate) {
+        return 1;
+      }
+      return 0;
+    });
+
+    setGoalList(sortedActiveGoalList);
   }, [activeGoalList])
 
   return (
@@ -42,8 +56,8 @@ export default function GoalListScreen(props) {
     >
       <ScrollView contentContainerStyle={styles.container}>
         {
-          activeGoalList.length ? (
-            activeGoalList.map((goal) => {
+          goalList.length ? (
+            goalList.map((goal) => {
               if (currentGroup === 0 || goal.priority == currentGroup)
               {
                 return (
