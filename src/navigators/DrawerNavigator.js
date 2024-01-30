@@ -1,6 +1,6 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import GoalsStackNavigator from './GoalsStackNavigator';
-import DailyPlanScreen from '../screens/drawer/DailyPlanScreen';
+import TodayPlanScreen from '../screens/drawer/TodayPlanScreen';
 import GoalsOrderPicker from '../components/GoalsOrderPicker';
 import GoalListGroupContextProvider from '../contexts/GoalListGroupContext';
 
@@ -28,7 +28,11 @@ export default function DrawerNavigator() {
           headerRight: () => <GoalsOrderPicker />
         }}
       />
-      <Drawer.Screen name="DailyPlan" component={DailyPlanScreen} options={{ title: 'Daily Plan'}}/>
+      <Drawer.Screen 
+        name="TodayPlan" 
+        component={TodayPlanScreen} 
+        options={{ title: 'Today\'s plan'}}
+      />
     </Drawer.Navigator>
     </GoalListGroupContextProvider>
   );
