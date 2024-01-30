@@ -1,4 +1,6 @@
-import { TouchableWithoutFeedback, Text } from 'react-native';
+import { TouchableWithoutFeedback, Text, View } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import TodayPlanScreen from '../screens/drawer/TodayPlanScreen';
 import GoalsOrderPicker from '../components/GoalsOrderPicker';
@@ -36,13 +38,17 @@ export default function DrawerNavigator() {
           <Drawer.Screen 
             name="AddNewGoal" 
             component={AddNewGoalScreen} 
-            options={({route}) => ({ 
+            options={({route, navigation}) => ({ 
               title: route.params ? route.params.headerTitle : 'Set new goal', 
               drawerItemStyle: {display: 'none'},
               swipeEnabled: false,
-              // headerRight: () => {
-              //     <Text>X</Text>
-              // }
+              headerLeft: () => (
+                <TouchableWithoutFeedback onPress={() => {
+                  navigation.goBack()
+                }}>
+                  <Ionicons style={{paddingLeft: 10}} name="arrow-back" size={26} color="black" />
+                </TouchableWithoutFeedback>
+              )
             })}
           />  
           <Drawer.Screen 
