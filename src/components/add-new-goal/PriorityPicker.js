@@ -1,8 +1,12 @@
 import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 export default function PriorityPicker({goalPriority, changeGoalPriority}) {
   const [chosenPriority, setChosenPriority] = useState(goalPriority);
+
+  useEffect(() => {
+    setChosenPriority(goalPriority)
+  }, [goalPriority]);
 
   return (
     <View style={{width: '100%'}}>

@@ -74,8 +74,7 @@ export default function FinishedGoalsScreen(props) {
                     </View>
                     <TouchableHighlight 
                       onPress={() => {
-                        DeviceEventEmitter.emit("event.changeDrawerNavigator", { shouldBeShown: false, enableSwipe: false });
-                        props.navigation.navigate("AddNewGoal", {goal: goal, action: 'edit', headerTitle: 'Edit goal'});
+                        props.navigation.navigate("AddNewGoal", {goal: goal, action: 'edit', headerTitle: 'Edit goal', isFinished: true});
                       }}
                       style={styles.listItemTouchable} 
                     >

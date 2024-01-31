@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import GoalFinishDateButton from './add-new-goal/GoalFinishDateButton';
 import DateDisplay from './DateDisplay';
 
@@ -22,6 +22,10 @@ const calculateDateOption = (date) => {
 export default function GoalFinishDate({updateGoalFinishDate, finishDate}) {
 	finishDate = finishDate ? new Date(finishDate) : null;
 	const [activeButton, setActiveButton] = useState(calculateDateOption(finishDate));
+
+	useEffect(() => {
+		setActiveButton(calculateDateOption(finishDate));
+	}, [finishDate])
 
 	const changeDateOption = (option) => {
 		setActiveButton(option);

@@ -9,15 +9,15 @@ export default function EditGoal({goalId, status, optionsItemTextStyle}) {
 
   const editGoal = (goalId, status) => {
     let goal;
+    let isFinished;
     if (status == "active") {
       goal = activeGoalList.find((element) => element.id == goalId);
-      goal.isFinished = false
+      isFinished = false
     } else if (status == "finished") {
       goal = finishedGoalList.find((element) => element.id == goalId);
-      goal.isFinished = true
+      isFinished = true
     }
-    DeviceEventEmitter.emit("event.changeDrawerNavigator", { shouldBeShown: false, enableSwipe: false });
-    navigation.navigate('AddNewGoal', {goal: goal, action: 'edit', headerTitle: 'Edit goal'});
+    navigation.navigate('AddNewGoal', {goal: goal, action: 'edit', headerTitle: 'Edit goal', isFinished: isFinished});
   }
   
   return (

@@ -1,5 +1,5 @@
 import { StyleSheet, ScrollView, View } from 'react-native'
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import FormTextInput from '../../components/FormTextInput';
 import GoalFinishDate from '../../components/GoalFinishDate';
 import { GoalListContext } from '../../contexts/GoalListContext';
@@ -18,7 +18,7 @@ export default function AddNewGoalScreen(props) {
 	const [goalTitle, setGoalTitle] = useState(goal ? goal.title : '');
 	const [goalFinishDate, setGoalFinishDate] = useState(goal ? new Date(goal.finishDate) : null);
 	const [goalPriority, setGoalPriority] = useState(goal ? goal.priority : null);
-	const [isFinished, setIsFinished] = useState(goal ? goal.isFinished : false);
+	const [isFinished, setIsFinished] = useState(props.route.params.isFinished ? props.route.params.isFinished : false);
 
 	const { 
 		activeGoalList, setActiveGoalList, storeActiveGoals, 
@@ -26,9 +26,21 @@ export default function AddNewGoalScreen(props) {
 		getNumberOfGoals, storeNumberOfGoals
 	} = useContext(GoalListContext);
 
+	useEffect(() => {
+		goal = null;
+		if (props.route.params.action == 'edit') {
+			goal = props.route.params.goal;
+		}
+
+		setGoalTitle(goal ? goal.title : '');
+		setGoalFinishDate(goal ? new Date(goal.finishDate) : null);
+		setGoalPriority(goal ? goal.priority : null);
+		setIsFinished(props.route.params.isFinished ? props.route.params.isFinished : false);
+	}, [props.route.params])
+
 	const submitForm = () => {
 		if (props.route.params.action == 'edit') {
-			if (goal.isFinished) {
+			if (props.route.params.isFinished) {
 				if (isFinished) {
 					let updatedFinishedGoals = finishedGoalList.slice();
 					let editedGoalIndex = updatedFinishedGoals.indexOf(
