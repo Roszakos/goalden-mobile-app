@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableHighlight, DeviceEventEmitter } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 import React from 'react';
 
 export default function AddNewGoalButton({navigation}) {
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFFFFF',
     fontWeight: 'bold',
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
+    fontSize: 16,
   },
 })

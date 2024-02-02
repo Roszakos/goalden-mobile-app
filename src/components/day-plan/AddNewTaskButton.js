@@ -10,7 +10,9 @@ export default function AddNewTaskButton({navigation}) {
           navigation.navigate('AddNewTask', {headerTitle: 'Add new task'});
         }}
       >
-        <Text style={styles.buttonText}>ADD TASK</Text>
+        <View style={styles.button} >
+          <Text style={styles.buttonText}>ADD NEW TASK</Text>
+        </View>
       </TouchableHighlight>
     </View>
   )
@@ -20,20 +22,24 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     position: 'absolute',
     bottom: 0,
-    padding: 13,
-    width: '100%',
-  },
-  buttonText: {
-    fontSize: 18,
-    fontWeight: '600',
-    paddingVertical: 10,
-    paddingHorizontal: 18,
+    width: '100%'
   },
   buttonTouchable: {
-    backgroundColor: '#2e78f0',
-    borderRadius: 100, 
-  }
+    width: '100%',
+  },
+  button: {
+    backgroundColor: '#1371bd',
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: 18,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
+    fontSize: 16
+  },
 })
