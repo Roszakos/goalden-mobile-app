@@ -28,7 +28,6 @@ export default function GoalListScreen(props) {
         setActiveGoalList(response);
         setGoalList(response);
       });
-      props.navigation.addListener("focus", () => DeviceEventEmitter.emit('event.changeDrawerNavigator', {shouldBeShown: true, enableSwipe: true}))
       props.navigation.addListener("blur", () => DeviceEventEmitter.emit('event.hideOptions'))
     },
     []
@@ -52,7 +51,7 @@ export default function GoalListScreen(props) {
   return (
     <View 
       style={styles.outerContainer}
-      onStartShouldSetResponder={() => DeviceEventEmitter.emit("event.hideOptions")}
+      onStartShouldSetResponder={ () => DeviceEventEmitter.emit("event.hideOptions") }
     >
       <ScrollView contentContainerStyle={styles.container}>
         {

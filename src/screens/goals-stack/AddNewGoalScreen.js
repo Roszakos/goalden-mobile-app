@@ -4,7 +4,7 @@ import FormTextInput from '../../components/FormTextInput';
 import GoalFinishDate from '../../components/GoalFinishDate';
 import { GoalListContext } from '../../contexts/GoalListContext';
 import PriorityPicker from '../../components/add-new-goal/PriorityPicker';
-import NewGoalFormSubmitButton from '../../components/add-new-goal/NewGoalFormSubmitButton';
+import FormSubmitButton from '../../components/FormSubmitButton';
 import GoalReachCheckbox from '../../components/add-new-goal/GoalReachCheckbox';
 
 
@@ -169,7 +169,7 @@ export default function AddNewGoalScreen(props) {
 					props.route.params.action == 'edit' ? <GoalReachCheckbox isFinished={isFinished} toggleFinished={setIsFinished} /> : null
 				}
 			</ScrollView>
-			<NewGoalFormSubmitButton navigation={props.navigation} submitForm={submitForm}/>
+			<FormSubmitButton submitForm={submitForm}/>
 		</View>
   )
 }

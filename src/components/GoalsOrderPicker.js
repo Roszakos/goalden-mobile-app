@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
+import { StyleSheet, Text, TouchableHighlight, View, DeviceEventEmitter } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { GoalListGroupContext } from '../contexts/GoalListGroupContext';
 
@@ -15,6 +15,8 @@ export default function GoalsOrderPicker() {
   const [allPicks, setAllPicks] = useState(dropdownPicks);
   const [currentPick, setCurrentPick] = useState(allPicks[currentGroup]);
   const [showMenu, setShowMenu] = useState(false);
+
+  DeviceEventEmitter.addListener('event.hideOptions', () => setShowMenu(false) )
 
   return (
     <View style={styles.container}>
