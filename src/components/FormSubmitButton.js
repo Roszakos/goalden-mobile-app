@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, TouchableHighlight, DeviceEventEmitter } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 import React from 'react';
 
-export default function NewGoalFormSubmitButton({navigation, submitForm}) {
+export default function FormSubmitButton({submitForm}) {
   return (
     <View style={styles.buttonContainer}>
       <TouchableHighlight 
