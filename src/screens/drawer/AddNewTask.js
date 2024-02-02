@@ -8,12 +8,19 @@ import DurationOptions from '../../components/add-new-task/DurationOptions';
 import { TodayPlanContext } from '../../contexts/TodayPlanContext';
 
 
-export default function AddNewTask({navigation}) {
+export default function AddNewTask({navigation, route}) {
+  let task = null;
+  if (route.params.action == 'edit') {
+    task = route.params.task;
+  }
+
+  const [taskTitle, setTaskTitle] = useState(task ? task.title : '');
+  const [taskTime, setTaskTime] = useState(task ? task.time : 0)
+  const [taskDuration, setTaskDuration] = useState(task ? task.duration : 0);
+  const [durationOptionChanged, setDurationOptionChanged] = useState(false);
+
   const { tasks, setTasks, storeTodayTasks } = useContext(TodayPlanContext);
 
-  const [taskTitle, setTaskTitle] = useState('');
-  const [taskTime, setTaskTime] = useState(0)
-  const [taskDuration, setTaskDuration] = useState(0);
   const durationTimerRef = useRef();
 
   useEffect(() => {
@@ -21,8 +28,22 @@ export default function AddNewTask({navigation}) {
       const hours = parseInt(taskDuration[0] + taskDuration[1]);
       const minutes = parseInt(taskDuration[2] + taskDuration[3]);
       durationTimerRef.current.setValue({hours: hours, minutes: minutes}, {animated: true});
+    } else {
+      durationTimerRef.current.setValue({hours: 0, minutes: 0}, {animated: true});
     }
-  }, [taskDuration]);
+  }, [durationOptionChanged]);
+
+  useEffect(() => {
+		task = null;
+		if (route.params.action == 'edit') {
+			task = route.params.task;
+		}
+
+		setTaskTitle(task ? task.title : '');
+		setTaskTime(task ? task.time : 0);
+		setTaskDuration(task ? task.duration : 0);
+    setDurationOptionChanged(previousValue => !previousValue);
+	}, [route.params])
 
   const submitForm = () => {
     setTasks([
@@ -96,7 +117,7 @@ export default function AddNewTask({navigation}) {
         </View>
         <View style={styles.timeDurationOptionsView}>
             <Text style={styles.timeDurationOptionsLabel}>Pick one of the options</Text>
-            <DurationOptions chosenDuration={taskDuration} changeDuration={setTaskDuration} />
+            <DurationOptions chosenDuration={taskDuration} changeDuration={setTaskDuration} setDurationOptionChanged={setDurationOptionChanged} />
         </View>
         <Text style={styles.timePickerHeaderText}>Or choose custom duration</Text>
         <View style={styles.timePickerContainer}>

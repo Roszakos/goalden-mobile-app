@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableHighlight } from 'react-native';
 import React, { useState, useContext, useEffect } from 'react';
 import AddNewTaskButton from '../../components/day-plan/AddNewTaskButton';
 import { TodayPlanContext } from '../../contexts/TodayPlanContext';
@@ -24,7 +24,7 @@ export default function DailyPlanScreen(props) {
       const minutes = time[2] + time[3];
       return hours + ':' + minutes;
     } 
-    return '00:00';
+    return '0:00';
   }
   
   return (
@@ -36,16 +36,20 @@ export default function DailyPlanScreen(props) {
             activities.map((task) => {
               return(
                 <View key={task.id}>
-                  <View style={styles.listItemContainer}>
-                    <View style={styles.listItemTimeView}>
-                      <Text style={styles.listItemTimeText}>
-                        {displayTime(task.time)}
-                      </Text>
+                  <TouchableHighlight onPress={() => {
+                    props.navigation.navigate('AddNewTask', { headerTitle: 'Edit task', action: 'edit', task: task })
+                  }}>
+                    <View style={styles.listItemContainer}>
+                      <View style={styles.listItemTimeView}>
+                        <Text style={styles.listItemTimeText}>
+                          {displayTime(task.time)}
+                        </Text>
+                      </View>
+                      <View style={styles.listItemTitleView}>
+                        <Text style={styles.listItemTitleText}>{task.title}</Text>
+                      </View>
                     </View>
-                    <View style={styles.listItemTitleView}>
-                      <Text style={styles.listItemTitleText}>{task.title}</Text>
-                    </View>
-                  </View>
+                  </TouchableHighlight>
                 </View>
               )
             })

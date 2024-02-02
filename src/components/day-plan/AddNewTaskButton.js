@@ -7,7 +7,7 @@ export default function AddNewTaskButton({navigation}) {
       <TouchableHighlight 
         style={styles.buttonTouchable}
         onPress={() => {
-          navigation.navigate('AddNewTask', {headerTitle: 'Add new task'});
+          navigation.navigate('AddNewTask', {headerTitle: 'Add new task', action: 'create'});
         }}
       >
         <View style={styles.button} >

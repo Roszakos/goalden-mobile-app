@@ -1,51 +1,68 @@
 import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
 import React from 'react'
 
-export default function DurationOptions({chosenDuration, changeDuration}) {
-
-  // const changeOption = (option) => {
-  //   switch (option) {
-  //     case 1:
-  //       changeDuration('0015');
-  //       break;
-  //     case 2:
-  //       changeDuration('0015');
-  //       break;
-  //     case 3:
-  //       changeDuration('0015');
-  //       break;
-  //     case 4:
-  //       changeDuration('0015');
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
+export default function DurationOptions({chosenDuration, changeDuration, setDurationOptionChanged}) {
   return (
     <View style={styles.container}>
       <TouchableHighlight 
         style={[styles.touchable, chosenDuration == '0015' ? null : styles.touchableInactive]}
-        onPress={() => changeDuration('0015') }
+        onPress={() => {
+          if (chosenDuration == '0015') {
+            changeDuration(0);
+          } else {
+            changeDuration('0015');
+          }
+          setDurationOptionChanged(previousValue => !previousValue);
+        }}
       >
-        <Text>15 minutes</Text>
+        <View style={styles.buttonView}>
+          <Text>15 minutes</Text>
+        </View>
       </TouchableHighlight>
       <TouchableHighlight 
         style={[styles.touchable, chosenDuration == '0030' ? null : styles.touchableInactive]}
-        onPress={() => changeDuration('0030') }
+        onPress={() => {
+          if (chosenDuration == '0030') {
+            changeDuration(0);
+          } else {
+            changeDuration('0030');
+          }
+          setDurationOptionChanged(previousValue => !previousValue);
+        }}
       >
-        <Text>30 minutes</Text>
+        <View style={styles.buttonView}>
+          <Text>30 minutes</Text>
+        </View>
       </TouchableHighlight>
       <TouchableHighlight 
         style={[styles.touchable, chosenDuration == '0100' ? null : styles.touchableInactive]}
-        onPress={() => changeDuration('0100') }
+        onPress={() => {
+          if (chosenDuration == '0100') {
+            changeDuration(0);
+          } else {
+            changeDuration('0100'); 
+          }
+          setDurationOptionChanged(previousValue => !previousValue);
+        }}
       >
-        <Text>1 hour</Text>
+        <View style={styles.buttonView}>
+          <Text>1 hour</Text>
+        </View>
       </TouchableHighlight>
       <TouchableHighlight 
         style={[styles.touchable, chosenDuration == '0200' ? null : styles.touchableInactive]}
-        onPress={() => changeDuration('0200') }
+        onPress={() => {
+          if (chosenDuration == '0200') {
+            changeDuration(0);
+          } else {
+            changeDuration('0200'); 
+          }
+          setDurationOptionChanged(previousValue => !previousValue);
+        }}
       >
-        <Text>2 hours</Text>
+        <View style={styles.buttonView}>
+          <Text>2 hours</Text>
+        </View>
       </TouchableHighlight>
     </View>
   )
@@ -60,13 +77,18 @@ const styles = StyleSheet.create({
     gap: 4
   },
   touchable: {
-    backgroundColor: '#25a61c',
-    paddingHorizontal: 10,
-    paddingVertical: 7,
+    // paddingHorizontal: 10,
+    // paddingVertical: 7,
     borderRadius: 12
   },
   touchableInactive: {
     backgroundColor: '#000',
     opacity: 0.4
+  },
+  buttonView: {
+    backgroundColor: '#25a61c',
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderRadius: 12
   }
 })
