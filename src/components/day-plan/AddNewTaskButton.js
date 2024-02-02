@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
 import React from 'react'
 
-export default function AddNewTaskButton() {
+export default function AddNewTaskButton({navigation}) {
   return (
     <View style={styles.buttonContainer}>
       <TouchableHighlight 
         style={styles.buttonTouchable}
         onPress={() => {
-          console.log('task added')
+          navigation.navigate('AddNewTask', {headerTitle: 'Add new task'});
         }}
       >
         <Text style={styles.buttonText}>ADD TASK</Text>

@@ -12,7 +12,7 @@ export default function FormTextInput({label, placeholder, updateState, value, i
 				<Text style={styles.labelSubtext}>{additionalLabel}</Text>
 			</View>
         <TextInput 
-          style={[styles.goalTitleInput, {borderWidth: inputBorderWidth}, {height: inputHeightStyle}]}
+          style={[styles.goalTitleInput, {borderWidth: inputBorderWidth}, {minHeight: inputHeightStyle}]}
           placeholder={placeholder}
           onChangeText={newText => updateState(newText)}
           defaultValue={value}
@@ -34,11 +34,14 @@ const styles = StyleSheet.create({
 		width: '98%',
 		borderColor: '#222',
 		padding: 10,
-		borderRadius: 5
+		borderRadius: 5,
+		fontSize: 17,
+		height: 'fit-content',
 	},
 	goalTitleInputHeader: {
 		fontWeight: '600',
-		paddingBottom: 4
+		paddingBottom: 4,
+		fontSize: 18
 	},
 	labelSubtext: {
 		fontWeight: '400',

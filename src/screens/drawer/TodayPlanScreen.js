@@ -1,42 +1,64 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import AddNewTaskButton from '../../components/day-plan/AddNewTaskButton';
+import { TodayPlanContext } from '../../contexts/TodayPlanContext';
 
-export default function DailyPlanScreen() {
-  const [activities, setActivities] = useState([
-    {id: 0, time: '12:30', title: 'umyć buzie', endTime: '13:30'},
-    {id: 1, time: '14:30', title: 'kodować', endTime: '15:30'},
-    {id: 2, time: '15:30', title: 'skoczyć z balkonu', endTime: '16:30'},
-  ]);
+export default function DailyPlanScreen(props) {
+  const { tasks, setTasks, getTodayTasks } = useContext(TodayPlanContext);
+  const [activities, setActivities] = useState([]);
+
+  useEffect(() => {
+    getTodayTasks().then((response) => {
+      setTasks(response);
+      setActivities(response);
+    })
+  }, []);
+
+  useEffect(() => {
+    setActivities(tasks);
+  }, [tasks])
+
+  const displayTime = (time) => {
+    if (time != 0) {
+      const hours = parseInt(time[0] + time[1]);
+      const minutes = time[2] + time[3];
+      return hours + ':' + minutes;
+    } 
+    return '00:00';
+  }
   
   return (
     <View style={styles.outerContainer}>
-      <ScrollView contentContainerStyle={styles.container}>
       {
         activities.length ? (
-          activities.map((activity) => {
-            return(
-              <View key={activity.id}>
-                <View style={styles.listItemContainer}>
-                  <View style={styles.listItemTimeView}>
-                    <Text style={styles.listItemTimeText}>{activity.time}</Text>
-                  </View>
-                  <View style={styles.listItemTitleView}>
-                    <Text style={styles.listItemTitleText}>{activity.title}</Text>
+          <ScrollView contentContainerStyle={styles.container}>
+          {
+            activities.map((task) => {
+              return(
+                <View key={task.id}>
+                  <View style={styles.listItemContainer}>
+                    <View style={styles.listItemTimeView}>
+                      <Text style={styles.listItemTimeText}>
+                        {displayTime(task.time)}
+                      </Text>
+                    </View>
+                    <View style={styles.listItemTitleView}>
+                      <Text style={styles.listItemTitleText}>{task.title}</Text>
+                    </View>
                   </View>
                 </View>
-                {/* <View style={styles.listItemBottomView}>
-                  <Text style={styles.listItemBottomText}>Finish by {activity.endTime}</Text>
-                </View> */}
-              </View>
-            )
-          })
+              )
+            })
+          }
+          </ScrollView>
         ) : (
-          <Text>You don't have anything planned for today.</Text>
+          <View style={styles.taskStatusView}>
+            <Text>You don't have anything planned for today.</Text>
+          </View>
         )
       }
-      </ScrollView>
-      <AddNewTaskButton />
+      
+      <AddNewTaskButton navigation={props.navigation}/>
     </View>
   );
 }
@@ -51,19 +73,20 @@ const styles = StyleSheet.create({
   listItemContainer: {
     width: '100%',
     flexDirection: 'row',
-    height: 70,
+    minHeight: 70,
     backgroundColor: 'green',
     marginTop: 10,
+    paddingVertical: 10
   },
   listItemTimeView: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRightWidth: 1
+    borderRightWidth: 1,
+    width: 90,
   },
   listItemTimeText: {
     fontSize: 24,
     fontWeight: '600',
-    paddingHorizontal: 10
   },
   listItemTitleView: {
     alignItems: 'center',
@@ -80,5 +103,10 @@ const styles = StyleSheet.create({
   listItemBottomText: {
     color: 'red',
     //textTransform: 'uppercase'
+  },
+  taskStatusView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
