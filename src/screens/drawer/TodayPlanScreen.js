@@ -2,57 +2,63 @@ import { StyleSheet, Text, View, ScrollView, TouchableHighlight } from 'react-na
 import React, { useState, useContext, useEffect } from 'react';
 import AddNewTaskButton from '../../components/day-plan/AddNewTaskButton';
 import { TodayPlanContext } from '../../contexts/TodayPlanContext';
+import TaskListItem from '../../components/day-plan/TaskListItem';
 
 export default function DailyPlanScreen(props) {
-  const { tasks, setTasks, getTodayTasks } = useContext(TodayPlanContext);
-  const [activities, setActivities] = useState([]);
+  const { tasks, setTasks, getTodayTasks, storeTodayTasks } = useContext(TodayPlanContext);
+  const [finishedActivities, setFinishedActivities] = useState([]);
+  const [unfinishedActivities, setUnfinishedActivities] = useState([]);
 
   useEffect(() => {
     getTodayTasks().then((response) => {
       setTasks(response);
-      setActivities(response);
     })
   }, []);
 
   useEffect(() => {
-    setActivities(tasks);
+    const finished = tasks.filter((item) => item.isDone);
+    const unfinished = tasks.filter((item) => !item.isDone)
+    setFinishedActivities(finished);
+    setUnfinishedActivities(unfinished);
   }, [tasks])
 
-  const displayTime = (time) => {
-    if (time != 0) {
-      const hours = parseInt(time[0] + time[1]);
-      const minutes = time[2] + time[3];
-      return hours + ':' + minutes;
-    } 
-    return '0:00';
+  const markTaskFinished = (task) => {
+    const taskIndex = tasks.indexOf(task);
+    const changedTasks = tasks.slice();
+    task.isDone = true;
+    changedTasks[taskIndex] = task;
+
+    setTasks(changedTasks);
+    storeTodayTasks(changedTasks);
+  }
+
+  const markTaskUnfinished = (task) => {
+    const taskIndex = tasks.indexOf(task);
+    const changedTasks = tasks.slice();
+    task.isDone = false;
+    changedTasks[taskIndex] = task;
+
+    setTasks(changedTasks);
+    storeTodayTasks(changedTasks);
   }
   
   return (
     <View style={styles.outerContainer}>
       {
-        activities.length ? (
+        
+        tasks.length ? (
           <ScrollView contentContainerStyle={styles.container}>
+            <View>
+              <Text>What you have to do</Text>
+            </View>
           {
-            activities.map((task) => {
-              return(
-                <View key={task.id}>
-                  <TouchableHighlight onPress={() => {
-                    props.navigation.navigate('AddNewTask', { headerTitle: 'Edit task', action: 'edit', task: task })
-                  }}>
-                    <View style={styles.listItemContainer}>
-                      <View style={styles.listItemTimeView}>
-                        <Text style={styles.listItemTimeText}>
-                          {displayTime(task.time)}
-                        </Text>
-                      </View>
-                      <View style={styles.listItemTitleView}>
-                        <Text style={styles.listItemTitleText}>{task.title}</Text>
-                      </View>
-                    </View>
-                  </TouchableHighlight>
-                </View>
-              )
-            })
+            unfinishedActivities.map((task) => <TaskListItem task={task} navigation={props.navigation} taskAction={markTaskFinished}/> )
+          }
+            <View>
+              <Text>Done today</Text>
+            </View>
+          {
+            finishedActivities.map((task) => <TaskListItem task={task} navigation={props.navigation} taskAction={markTaskUnfinished}/> )
           }
           </ScrollView>
         ) : (
@@ -74,43 +80,9 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
   },
-  listItemContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    minHeight: 70,
-    backgroundColor: 'green',
-    marginTop: 10,
-    paddingVertical: 10
-  },
-  listItemTimeView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRightWidth: 1,
-    width: 90,
-  },
-  listItemTimeText: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  listItemTitleView: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 6
-  },
-  listItemTitleText: {
-    fontSize: 16,
-  },
-  listItemBottomView: {
-    width: '100%',
-    //alignItems: 'flex-end'
-  },
-  listItemBottomText: {
-    color: 'red',
-    //textTransform: 'uppercase'
-  },
   taskStatusView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
-  }
+  },
 });

@@ -51,7 +51,8 @@ export default function AddNewTask({navigation, route}) {
         id: Math.random(),
         title: taskTitle,
         time: taskTime,
-        duration: taskDuration
+        duration: taskDuration,
+        isDone: false
       },
       ...tasks
     ]);
@@ -60,7 +61,8 @@ export default function AddNewTask({navigation, route}) {
         id: Math.random(),
         title: taskTitle,
         time: taskTime,
-        duration: taskDuration
+        duration: taskDuration,
+        isDone: false
       },
       ...tasks
     ]);
