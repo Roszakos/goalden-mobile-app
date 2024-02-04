@@ -22,6 +22,7 @@ export default function AddNewTask({navigation, route}) {
   const { tasks, setTasks, storeTodayTasks } = useContext(TodayPlanContext);
 
   const durationTimerRef = useRef();
+  const taskTimerRef = useRef();
 
   useEffect(() => {
     if (taskDuration !== 0) {
@@ -35,37 +36,50 @@ export default function AddNewTask({navigation, route}) {
 
   useEffect(() => {
 		task = null;
+    let hours;
+    let minutes;
 		if (route.params.action == 'edit') {
 			task = route.params.task;
+      if (task.time !== 0) {
+        hours = parseInt(task.time[0] + task.time[1]);
+        minutes = parseInt(task.time[2] + task.time[3]);
+      }
 		}
 
 		setTaskTitle(task ? task.title : '');
 		setTaskTime(task ? task.time : 0);
 		setTaskDuration(task ? task.duration : 0);
     setDurationOptionChanged(previousValue => !previousValue);
+    task ? 
+      taskTimerRef.current.setValue({hours: hours, minutes: minutes}, {animated: false}) :
+      taskTimerRef.current.setValue({hours: 0, minutes: 0}, {animated: false});
 	}, [route.params])
 
   const submitForm = () => {
-    setTasks([
-      {
-        id: Math.random(),
-        title: taskTitle,
-        time: taskTime,
-        duration: taskDuration,
-        isDone: false
-      },
-      ...tasks
-    ]);
-    storeTodayTasks([
-      {
-        id: Math.random(),
-        title: taskTitle,
-        time: taskTime,
-        duration: taskDuration,
-        isDone: false
-      },
-      ...tasks
-    ]);
+    const newTask = {
+      id: Math.random(),
+      title: taskTitle,
+      time: taskTime,
+      duration: taskDuration,
+      isDone: task ? task.isDone : false
+    } 
+
+    if (route.params.action == 'edit') {
+      const updatedTasks = tasks.slice();
+      updatedTasks[tasks.indexOf(task)] = newTask;
+      setTasks(updatedTasks);
+      storeTodayTasks(updatedTasks);
+    } else {
+      setTasks([
+        newTask,
+        ...tasks
+      ]);
+      storeTodayTasks([
+        newTask,
+        ...tasks
+      ]);
+    }
+
     navigation.navigate('TodayPlan');
   }
 
@@ -89,6 +103,7 @@ export default function AddNewTask({navigation, route}) {
             use24HourPicker
             LinearGradient={LinearGradient}
             minuteLabel="min"
+            ref={taskTimerRef}
             styles={{
                 theme: "light",
                 backgroundColor: '#69d69c',
@@ -114,7 +129,7 @@ export default function AddNewTask({navigation, route}) {
           />
         </View>
         <View style={styles.timePickerLabelView}>
-          <Text style={styles.timePickerLabelText}>End after </Text>
+          <Text style={styles.timePickerLabelText}>Finish after </Text>
           <Text style={styles.timerPickerLabelSubtext}>(optional)</Text>
         </View>
         <View style={styles.timeDurationOptionsView}>
