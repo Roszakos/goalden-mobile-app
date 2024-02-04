@@ -23,8 +23,29 @@ export default function TodayPlanContextProvider({children}) {
         }
     }
 
+    const storeLatestPlanDate = async (date) => {
+        try {
+            await AsyncStorage.setItem('latestPlanDate', date);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    const getLatestPlanDate = async () => {
+        try {
+            const date = await AsyncStorage.getItem('latestPlanDate')
+            return date != null ? date : null;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     return (
-      <TodayPlanContext.Provider value={{ tasks, setTasks, storeTodayTasks, getTodayTasks }}>
+      <TodayPlanContext.Provider value={{ 
+            tasks, setTasks, 
+            storeTodayTasks, getTodayTasks,
+            storeLatestPlanDate, getLatestPlanDate
+        }}
+    >
         { children }
       </TodayPlanContext.Provider>
     )

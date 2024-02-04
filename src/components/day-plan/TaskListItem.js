@@ -13,7 +13,7 @@ export default function TaskListItem({navigation, task, taskAction}) {
   }
 
   return (
-    <View key={task.id}>
+    <View>
       <TouchableHighlight 
         style={styles.listItemTouchable}
         onPress={() => {
