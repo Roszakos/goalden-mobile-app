@@ -1,10 +1,21 @@
 import moment from 'moment';
 
-// const TODAY = new Date();
-// const DAYS_TO_ADD = 8 - TODAY.getDay();
-// const END_OF_WEEK = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + DAYS_TO_ADD, 1);
-// const END_OF_MONTH = new Date(TODAY.getFullYear(), TODAY.getMonth() + 1, 1, 1);
-// const END_OF_YEAR = new Date(TODAY.getFullYear() + 1, 0, 1, 1);
+moment.updateLocale('en', {
+    relativeTime : {
+        future: "in %s",
+        past:   "%s ago",
+        s  : 'today',
+        ss : 'today',
+        m:  "today",
+        mm: "today",
+        h:  "today",
+        hh: "today",
+        d:  "today",
+        w:  "1 week",
+        M:  "1 month",
+        y:  "1 year",
+    }
+});
 
 const TODAY = moment().format(moment.HTML5_FMT.DATE);
 const END_OF_WEEK = moment().endOf('week').add(2, 'd').format(moment.HTML5_FMT.DATE);
@@ -35,33 +46,20 @@ export const groupGoalsByFinishDate = (goals) => {
       groupedGoals.longer.list.push(goal);
     }
   })
-  //console.log(groupedGoals.timeout.list);
   return groupedGoals;
 }
 
 // Displays goals finish date
 export const calculateDate = (finishDate) => {
   if (finishDate) {
-    // finishDate = new Date(finishDate);
-    // const finishDateNoHours = new Date(finishDate.getFullYear(), finishDate.getMonth(), finishDate.getDate());
-    // const todayNoHours = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
-    // if (finishDateNoHours < todayNoHours) {
-    //   return 'time\'s up';
-    // } else if (finishDateNoHours == todayNoHours) {
-    //   return 'today';
-    // } else if (finishDate <= END_OF_WEEK) {
-    //   return 'this week';
-    // } else if (finishDate <= END_OF_MONTH) {
-    //   return 'this month';
-    // } else if (finishDate <= END_OF_YEAR) {
-    //   return 'this year';
-    // }
     const date = moment(finishDate);
-    if (finishDate < moment()) {
-      return date.from(moment());
-    } else {
-      return date.from(moment(), true);
+    if (date.isBetween(moment().startOf('day'), moment().endOf('day'))) {
+      return date.fromNow(true);
+    } 
+    if (date < moment()) {
+      return date.fromNow();
     }
+    return date.fromNow(true);
   }
   return 'date not specified';
 }
