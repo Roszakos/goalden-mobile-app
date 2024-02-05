@@ -68,6 +68,14 @@ export default function DailyPlanScreen(props) {
     setTasks(changedTasks);
     storeTodayTasks(changedTasks);
   }
+
+  const deleteTask = (task) => {
+    const changedTasks = tasks.slice();
+    changedTasks.splice(tasks.indexOf(task), 1);
+
+    setTasks(changedTasks);
+    storeTodayTasks(changedTasks);
+  }
   
   return (
     <View style={styles.outerContainer}>
@@ -79,17 +87,41 @@ export default function DailyPlanScreen(props) {
       {
         tasks.length ? (
           <ScrollView contentContainerStyle={styles.container}>
-            <View>
-              <Text>What you have to do</Text>
-            </View>
             {
-              unfinishedActivities.map((task) => <TaskListItem key={task.id} task={task} navigation={props.navigation} taskAction={markTaskFinished}/> )
+              unfinishedActivities.length ? (
+                <View>
+                  <Text>What you have to do</Text>
+                </View>
+              ) : (null)
             }
-            <View>
-              <Text>Done today</Text>
-            </View>
             {
-              finishedActivities.map((task) => <TaskListItem key={task.id} task={task} navigation={props.navigation} taskAction={markTaskUnfinished}/> )
+              unfinishedActivities.map((task) => 
+                <TaskListItem 
+                  key={task.id} 
+                  task={task} 
+                  navigation={props.navigation}
+                  taskAction={markTaskFinished}
+                  deleteTask={deleteTask}
+                /> 
+              )
+            }
+            {
+              finishedActivities.length ? (
+                <View>
+                  <Text>Done today</Text>
+                </View>
+              ) : (null)
+            }
+            {
+              finishedActivities.map((task) => 
+                <TaskListItem 
+                  key={task.id} 
+                  task={task} 
+                  navigation={props.navigation} 
+                  taskAction={markTaskUnfinished}
+                  deleteTask={deleteTask}
+                /> 
+              )
             }
           </ScrollView>
         ) : (

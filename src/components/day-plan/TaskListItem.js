@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
 import React from 'react'
+import { FontAwesome5 } from '@expo/vector-icons';
 
-export default function TaskListItem({navigation, task, taskAction}) {
+export default function TaskListItem({navigation, task, taskAction, deleteTask}) {
 
   const displayTime = (time) => {
     if (time != 0) {
@@ -30,20 +31,36 @@ export default function TaskListItem({navigation, task, taskAction}) {
             <View style={styles.listItemTitleView}>
               <Text style={styles.listItemTitleText}>{task.title}</Text>
             </View>
-            <TouchableHighlight
-              style={styles.taskDoneButtonTouchable}
-              onPress={() => {
-                taskAction(task);
-              }}
-            >
-              <View style={[styles.taskDoneButtonView, {backgroundColor: task.isDone ? '#16ba1f' : '#cfad63'}]}>
-                <Text>
-                  {
-                    task.isDone ? 'UNDONE' : 'DONE'
-                  }
-                </Text>
-              </View>
-            </TouchableHighlight>
+            <View style={styles.taskActionsView}>
+              <TouchableHighlight
+                style={styles.taskDoneButtonTouchable}
+                onPress={() => {
+                  taskAction(task);
+                }}
+              >
+                <View style={[styles.taskDoneButtonView, {backgroundColor: task.isDone ? '#16ba1f' : '#cfad63'}]}>
+                  <Text>
+                    {
+                      task.isDone ? 'REVIVE' : 'DONE'
+                    }
+                  </Text>
+                </View>
+              </TouchableHighlight>
+              <TouchableHighlight 
+                style={styles.taskDeleteTouchable}
+                onPress={() => {
+                  deleteTask(task);
+                }}
+              >
+                <View style={styles.taskDeleteView}>
+                  <FontAwesome5 
+                    name="trash-alt" 
+                    size={24} 
+                    color="black" 
+                  />
+                </View>
+              </TouchableHighlight>
+            </View>
           </View>
         </View>
       </TouchableHighlight>
@@ -87,12 +104,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   taskDoneButtonView: {
-    alignSelf: 'stretch',
-    justifyContent: 'center',
     paddingHorizontal: 10,
-    paddingVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   taskDoneButtonTouchable: {
-    marginRight: 6
+    marginRight: 6,
+    flexDirection: 'row',
+    alignItems: 'stretch',
+  },
+  taskActionsView: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    height: '100%',
+    gap: 4,
+    marginRight: 10
+  },
+  taskDeleteTouchable: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+  },
+  taskDeleteView: {
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10
   }
 })
