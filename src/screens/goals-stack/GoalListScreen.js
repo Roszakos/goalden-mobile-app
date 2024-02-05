@@ -6,8 +6,6 @@ import { GoalListContext } from '../../contexts/GoalListContext';
 import { GoalListGroupContext } from '../../contexts/GoalListGroupContext';
 import { groupGoalsByFinishDate } from '../../scripts/goalItemScripts';
 
-import GoalListItem from '../../components/GoalListItem';
-
 export default function GoalListScreen(props) {
   const { activeGoalList, setActiveGoalList, getActiveGoals } = useContext(GoalListContext);
   const { currentGroup } = useContext(GoalListGroupContext);
@@ -47,46 +45,21 @@ export default function GoalListScreen(props) {
     });
 
     setGoalList(groupGoalsByFinishDate(sortedActiveGoalList));
-  }, [activeGoalList])
-
-  //useEffect(() => console.log(goalList), [goalList]);
+  }, [activeGoalList, currentGroup])
 
   return (
     <View 
       style={styles.outerContainer}
       onStartShouldSetResponder={ () => DeviceEventEmitter.emit("event.hideOptions") }
     >
-      {/* {
-      goalsStatus == "" ? (
-        Object.keys(goalList).forEach(function (key) {
-          console.log(goalList[key]);
-          // if (goalList[key].list.length) {
-          //   <View>
-          //     <Text>{ goalList[key].label }</Text>
-          //   </View>
-          //   goalList[key].list.map((goal) => {
-          //     console.log(goal);
-          //     //return <GoalListItem key={goal.id} goal={goal} navigation={props.navigation} /> 
-          //     return (<Text> XD</Text>)
-          //   })
-          // }
-        })
-      ) : ('')
-      } */}
       <ScrollView contentContainerStyle={styles.container}>
         {
           goalsStatus == "" ? (
-            Object.keys(goalList).map(function (key) {
+            Object.keys(goalList).map(function (key, index) {
               if (goalList[key].list.length) {
-                return <GoalListSection label={goalList[key].label} goalList={goalList[key].list} navigation={props.navigation} />
+                return <GoalListSection key={index} label={goalList[key].label} goalList={goalList[key].list} navigation={props.navigation} />
               }
             })
-            // goalList.timeout.list.map((goal) => {
-            //   if (currentGroup === 0 || goal.priority == currentGroup)
-            //   {
-            //     return <GoalListItem key={goal.id} goal={goal} navigation={props.navigation} />
-            //   }
-            // })
           ) : (
             <Text>{goalsStatus}</Text>
           )
