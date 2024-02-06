@@ -25,7 +25,7 @@ export default function AddNewTask({navigation, route}) {
   const taskTimerRef = useRef();
 
   useEffect(() => {
-    if (taskDuration !== 0) {
+    if (parseInt(taskDuration) !== 0) {
       const hours = parseInt(taskDuration[0] + taskDuration[1]);
       const minutes = parseInt(taskDuration[2] + taskDuration[3]);
       durationTimerRef.current.setValue({hours: hours, minutes: minutes}, {animated: true});
@@ -33,6 +33,11 @@ export default function AddNewTask({navigation, route}) {
       durationTimerRef.current.setValue({hours: 0, minutes: 0}, {animated: true});
     }
   }, [durationOptionChanged]);
+
+  useEffect(() => {
+    setTaskDuration(task ? task.duration : 0);
+    setDurationOptionChanged(previousValue => !previousValue);
+  }, []);
 
   useEffect(() => {
 		task = null;

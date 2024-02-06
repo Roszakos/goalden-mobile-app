@@ -15,7 +15,7 @@ export default function DailyPlanScreen(props) {
     getLatestPlanDate().then((latestPlanDate) => {
       if (!latestPlanDate || latestPlanDate < moment().format('DD-MM-YYYY')) {
         storeLatestPlanDate(moment().format('DD-MM-YYYY'));
-        storeTodayTasks(null);
+        storeTodayTasks([]);
         setTasks([]);
       } else {
         getTodayTasks().then((tasks) => {
