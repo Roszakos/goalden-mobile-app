@@ -4,9 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const TodayPlanContext = createContext([]);
 
 export default function TodayPlanContextProvider({children}) {
-  const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState([]);
 
-  const storeTodayTasks = async (tasks) => {
+    const storeTodayTasks = async (tasks) => {
         try {
             const tasksJson = JSON.stringify(tasks)
             await AsyncStorage.setItem('todayTasks', tasksJson);

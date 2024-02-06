@@ -5,23 +5,48 @@ import AddNewTaskButton from '../../components/day-plan/AddNewTaskButton';
 import { TodayPlanContext } from '../../contexts/TodayPlanContext';
 import TaskListItem from '../../components/day-plan/TaskListItem';
 import DateDisplay from '../../components/DateDisplay';
+import { storeDayPlans, getDayPlans, searchForPlanToRepeat } from '../../scripts/dayPlanScripts';
+import PlanRepeatModal from '../../components/day-plan/PlanRepeatModal';
+
+
 
 export default function DailyPlanScreen(props) {
   const { tasks, setTasks, getTodayTasks, storeTodayTasks, getLatestPlanDate, storeLatestPlanDate } = useContext(TodayPlanContext);
   const [finishedActivities, setFinishedActivities] = useState([]);
   const [unfinishedActivities, setUnfinishedActivities] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [repeatablePlans, setRepeatablePlans] = useState([]);
 
   useEffect(() => {
     getLatestPlanDate().then((latestPlanDate) => {
-      if (!latestPlanDate || latestPlanDate < moment().format('DD-MM-YYYY')) {
-        storeLatestPlanDate(moment().format('DD-MM-YYYY'));
-        storeTodayTasks([]);
-        setTasks([]);
-      } else {
-        getTodayTasks().then((tasks) => {
+      getTodayTasks().then((tasks) => {
+        if (!latestPlanDate || latestPlanDate < moment().format(moment.HTML5_FMT.DATE)) {
+          storeLatestPlanDate(moment().format(moment.HTML5_FMT.DATE));
+          if (tasks.length && latestPlanDate) {
+            getDayPlans().then((newDayPlans) => {
+              newDayPlans.push({
+                date: latestPlanDate,
+                tasks: tasks
+              })
+              console.log(newDayPlans);
+
+              const availablePlans = searchForPlanToRepeat(newDayPlans);
+              if (availablePlans) {
+                setRepeatablePlans(availablePlans);
+                setShowModal(true);
+              }
+              storeTodayTasks([]);
+              setTasks([]);
+              storeDayPlans(newDayPlans);
+            })
+          } else {
+            storeTodayTasks([]);
+            setTasks([]);
+          }
+        } else {
           setTasks(tasks);
-        })
-      }
+        }
+      })
     })
     
   }, []);
@@ -76,16 +101,37 @@ export default function DailyPlanScreen(props) {
     setTasks(changedTasks);
     storeTodayTasks(changedTasks);
   }
+
+  const modalSelectedOption = (option) => {
+    switch (option) {
+      case 1:
+        setTasks(repeatablePlans[0]);
+        storeTodayTasks(repeatablePlans[0]);
+        break;
+      case 2:
+        setTasks(repeatablePlans[1]);
+        storeTodayTasks(repeatablePlans[1]);
+        break;
+      default:
+        break;
+    }
+  }
   
   return (
     <View style={styles.outerContainer}>
+      <PlanRepeatModal
+        showModal={showModal} 
+        setShowModal={setShowModal} 
+        returnSelectedOption={modalSelectedOption} 
+        availablePlans={repeatablePlans}
+      />
       <View style={styles.headerDateView}>
         <Text style={styles.headerDateText}>
           <DateDisplay date={Date.now()}/>
         </Text>
       </View>
       {
-        tasks.length ? (
+        (tasks && tasks.length) ? (
           <ScrollView contentContainerStyle={styles.container}>
             {
               unfinishedActivities.length ? (
