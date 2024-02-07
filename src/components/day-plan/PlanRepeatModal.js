@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, Modal, Pressable } from 'react-native'
 import React from 'react'
 
-export default function PlanRepeatModal({showModal, setShowModal, returnSelectedOption, availablePlans}) {
+export default function PlanRepeatModal({showModal, setShowModal, returnSelectedOption, availablePlans, dayName}) {
+  dayName = dayName.toLowerCase();
   return (
       <Modal
         animationType="slide"
@@ -45,7 +46,7 @@ export default function PlanRepeatModal({showModal, setShowModal, returnSelected
                 <View style={styles.buttonChoose}>
                   <View style={[styles.button, availablePlans[1] ? null : styles.buttonInactive]}>
                     <Text style={styles.textStyle}>
-                      Use last weeks plan
+                      Use last {dayName} plan
                     </Text>
                   </View>
                 </View>

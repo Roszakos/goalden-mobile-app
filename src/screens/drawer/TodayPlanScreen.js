@@ -126,6 +126,7 @@ export default function DailyPlanScreen(props) {
         setShowModal={setShowModal} 
         returnSelectedOption={modalSelectedOption} 
         availablePlans={repeatablePlans}
+        dayName={moment().format('dddd')}
       />
       <View style={styles.headerDateView}>
         <Text style={styles.headerDateText}>
