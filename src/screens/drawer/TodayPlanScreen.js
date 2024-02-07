@@ -21,21 +21,18 @@ export default function DailyPlanScreen(props) {
     getLatestPlanDate().then((latestPlanDate) => {
       getTodayTasks().then((tasks) => {
         if (!latestPlanDate || latestPlanDate < moment().format(moment.HTML5_FMT.DATE)) {
-          storeLatestPlanDate(moment().format(moment.HTML5_FMT.DATE));
           if (tasks.length && latestPlanDate) {
             getDayPlans().then((newDayPlans) => {
               newDayPlans.push({
                 date: latestPlanDate,
                 tasks: tasks
               })
-              console.log(newDayPlans);
 
               const availablePlans = searchForPlanToRepeat(newDayPlans);
               if (availablePlans) {
                 setRepeatablePlans(availablePlans);
                 setShowModal(true);
               }
-              storeTodayTasks([]);
               setTasks([]);
               storeDayPlans(newDayPlans);
             })
@@ -103,6 +100,7 @@ export default function DailyPlanScreen(props) {
   }
 
   const modalSelectedOption = (option) => {
+    storeLatestPlanDate(moment().format(moment.HTML5_FMT.DATE));
     switch (option) {
       case 1:
         setTasks(repeatablePlans[0]);
@@ -112,7 +110,11 @@ export default function DailyPlanScreen(props) {
         setTasks(repeatablePlans[1]);
         storeTodayTasks(repeatablePlans[1]);
         break;
+      case 3:
+        storeTodayTasks([]);
+        break;
       default:
+        storeTodayTasks([]);
         break;
     }
   }
