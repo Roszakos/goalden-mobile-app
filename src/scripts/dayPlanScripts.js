@@ -41,3 +41,29 @@ export const searchForPlanToRepeat = (plans) => {
   }
   return false;
 }
+
+export const sortTasks = (tasks) => {
+  let sortedTasks = [];
+  sortedTasks[0] = tasks.filter((item) => item.isDone);
+  sortedTasks[0].sort((a, b) => {
+      if (parseInt(a.time) < parseInt(b.time)) {
+        return -1;
+      } else if (parseInt(a.time) > parseInt(b.time)) {
+        return 1;
+      }
+      return 0;
+    })
+
+  sortedTasks[1] = tasks.filter((item) => !item.isDone);
+  sortedTasks[1].sort((a, b) => {
+    if (parseInt(a.time) < parseInt(b.time)) {
+      return -1;
+    } else if (parseInt(a.time) > parseInt(b.time)) {
+      return 1;
+    }
+    return 0;
+  })
+
+  return sortedTasks;
+}
+

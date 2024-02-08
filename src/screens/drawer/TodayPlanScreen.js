@@ -5,7 +5,7 @@ import AddNewTaskButton from '../../components/day-plan/AddNewTaskButton';
 import { TodayPlanContext } from '../../contexts/TodayPlanContext';
 import TaskListItem from '../../components/day-plan/TaskListItem';
 import DateDisplay from '../../components/DateDisplay';
-import { storeDayPlans, getDayPlans, searchForPlanToRepeat } from '../../scripts/dayPlanScripts';
+import { storeDayPlans, getDayPlans, searchForPlanToRepeat, sortTasks } from '../../scripts/dayPlanScripts';
 import PlanRepeatModal from '../../components/day-plan/PlanRepeatModal';
 
 
@@ -49,28 +49,9 @@ export default function DailyPlanScreen(props) {
   }, []);
 
   useEffect(() => {
-    const finished = tasks.filter((item) => item.isDone);
-    finished.sort((a, b) => {
-      if (parseInt(a.time) < parseInt(b.time)) {
-        return -1;
-      } else if (parseInt(a.time) > parseInt(b.time)) {
-        return 1;
-      }
-      return 0;
-    })
-
-    const unfinished = tasks.filter((item) => !item.isDone);
-    unfinished.sort((a, b) => {
-      if (parseInt(a.time) < parseInt(b.time)) {
-        return -1;
-      } else if (parseInt(a.time) > parseInt(b.time)) {
-        return 1;
-      }
-      return 0;
-    })
-
-    setFinishedActivities(finished);
-    setUnfinishedActivities(unfinished);
+    const sorted = sortTasks(tasks);
+    setFinishedActivities(sorted[0]);
+    setUnfinishedActivities(sorted[1]);
   }, [tasks])
 
   const markTaskFinished = (task) => {
