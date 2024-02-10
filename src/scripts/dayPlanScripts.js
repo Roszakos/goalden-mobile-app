@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
+import { scheduleNotification, setTaskNotificationTime, displayTaskDuration } from './notificationScripts';
 
 export const storeDayPlans = async (plans) => {
   try {
@@ -67,3 +68,17 @@ export const sortTasks = (tasks) => {
   return sortedTasks;
 }
 
+export const setTaskNotification = (task) => {
+  // Set exact time when notification should be shown
+  const hour = task.time[0] + task.time[1];
+  const minute = task.time[2] + task.time[3];
+  const date = setTaskNotificationTime(parseInt(hour), parseInt(minute));
+
+  // Set notification title
+  const notificationTitle = task.title + " " + hour + ":" + minute
+
+  // Convert task duration to displayable text
+  const notificationBody = parseInt(task.duration) ? "For " + displayTaskDuration(task.duration) : '';
+
+  scheduleNotification(notificationTitle, date, notificationBody, task.id ?? null);
+}

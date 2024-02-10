@@ -59,7 +59,6 @@ export async function scheduleNotification (
       date: date,
     },
   });
-  console.log("notif id on scheduling",id)
   return id;
 }
 

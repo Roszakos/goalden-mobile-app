@@ -5,7 +5,7 @@ import AddNewTaskButton from '../../components/day-plan/AddNewTaskButton';
 import { TodayPlanContext } from '../../contexts/TodayPlanContext';
 import TaskListItem from '../../components/day-plan/TaskListItem';
 import DateDisplay from '../../components/DateDisplay';
-import { storeDayPlans, getDayPlans, searchForPlanToRepeat, sortTasks } from '../../scripts/dayPlanScripts';
+import { storeDayPlans, getDayPlans, searchForPlanToRepeat, sortTasks, setTaskNotification } from '../../scripts/dayPlanScripts';
 import PlanRepeatModal from '../../components/day-plan/PlanRepeatModal';
 import { cancelNotification } from '../../scripts/notificationScripts';
 
@@ -38,6 +38,7 @@ export default function DailyPlanScreen(props) {
               storeDayPlans(newDayPlans);
             })
           } else {
+            storeLatestPlanDate(moment().format(moment.HTML5_FMT.DATE));
             storeTodayTasks([]);
             setTasks([]);
           }
@@ -88,10 +89,16 @@ export default function DailyPlanScreen(props) {
       case 1:
         setTasks(repeatablePlans[0]);
         storeTodayTasks(repeatablePlans[0]);
+        repeatablePlans[0].forEach((task) => {
+          setTaskNotification(task);
+        })
         break;
       case 2:
         setTasks(repeatablePlans[1]);
         storeTodayTasks(repeatablePlans[1]);
+        repeatablePlans[1].forEach((task) => {
+          setTaskNotification(task);
+        })
         break;
       case 3:
         storeTodayTasks([]);
