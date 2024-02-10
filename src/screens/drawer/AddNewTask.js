@@ -6,6 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import FormSubmitButton from '../../components/FormSubmitButton';
 import DurationOptions from '../../components/add-new-task/DurationOptions';
 import { TodayPlanContext } from '../../contexts/TodayPlanContext';
+import Notification, { scheduleNotification, displayTaskDuration, setNotificationTime } from '../../scripts/notificationScripts';
 
 
 export default function AddNewTask({navigation, route}) {
@@ -45,7 +46,7 @@ export default function AddNewTask({navigation, route}) {
     let minutes;
 		if (route.params.action == 'edit') {
 			task = route.params.task;
-      if (task.time !== 0) {
+      if (parseInt(task.time) !== 0) {
         hours = parseInt(task.time[0] + task.time[1]);
         minutes = parseInt(task.time[2] + task.time[3]);
       }
@@ -61,31 +62,42 @@ export default function AddNewTask({navigation, route}) {
 	}, [route.params])
 
   const submitForm = () => {
-    const newTask = {
-      id: Math.random(),
-      title: taskTitle,
-      time: taskTime,
-      duration: taskDuration,
-      isDone: task ? task.isDone : false
-    } 
+    // Set exact time when notification should be shown
+    const hour = taskTime[0] + taskTime[1];
+    const minute = taskTime[2] + taskTime[3];
+    const date = setNotificationTime(parseInt(hour), parseInt(minute));
 
-    if (route.params.action == 'edit') {
-      const updatedTasks = tasks.slice();
-      updatedTasks[tasks.indexOf(task)] = newTask;
-      setTasks(updatedTasks);
-      storeTodayTasks(updatedTasks);
-    } else {
-      setTasks([
-        newTask,
-        ...tasks
-      ]);
-      storeTodayTasks([
-        newTask,
-        ...tasks
-      ]);
-    }
+    // Set notification title
+    const notificationTitle = taskTitle + " " + hour + ":" + minute
 
-    navigation.navigate('TodayPlan');
+    // Convert task duration to displayable text
+    const notificationBody = parseInt(taskDuration) ? "For " + displayTaskDuration(taskDuration) : '';
+
+    scheduleNotification(notificationTitle, date, notificationBody, task ? task.id : null).then((id) => {
+      const newTask = {
+        id: id,
+        title: taskTitle,
+        time: taskTime,
+        duration: taskDuration,
+        isDone: task ? task.isDone : false
+      } 
+      if (route.params.action == 'edit') {
+        const updatedTasks = tasks.slice();
+        updatedTasks[tasks.indexOf(task)] = newTask;
+        setTasks(updatedTasks);
+        storeTodayTasks(updatedTasks);
+      } else {
+        setTasks([
+          newTask,
+          ...tasks
+        ]);
+        storeTodayTasks([
+          newTask,
+          ...tasks
+        ]);
+      }
+      navigation.navigate('TodayPlan');
+    })
   }
 
   return (
@@ -176,6 +188,7 @@ export default function AddNewTask({navigation, route}) {
         </View>
       </View>
       <FormSubmitButton submitForm={submitForm} />
+      <Notification />
     </View>
   )
 }
