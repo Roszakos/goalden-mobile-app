@@ -86,14 +86,12 @@ export const displayTaskDuration = (duration) => {
     const hours = parseInt(duration[0] + duration[1]);
     const minutes = duration[2] + duration[3];
 
-    if (hours && minutes) {
-      //const declention = hours == 1 ? ' hour' : ' hours';
-      
+    if (parseInt(hours) && parseInt(minutes)) {
       return hours + ' h ' + minutes + ' min';
-    } else if (hours) {
+    } else if (parseInt(hours)) {
       const declention = hours == 1 ? ' hour' : ' hours';
       return hours + declention;
-    } else if (minutes) {
+    } else if (parseInt(minutes)) {
       const declention = minutes == 1 ? ' minute' : ' minutes';
       return minutes + declention;
     }
@@ -103,7 +101,7 @@ export const displayTaskDuration = (duration) => {
   return null;
 }
 
-export const setNotificationTime = (hour, minute) => {
+export const setTaskNotificationTime = (hour, minute) => {
   const date = new Date();
   date.setHours(hour);
   date.setMinutes(minute - 5);

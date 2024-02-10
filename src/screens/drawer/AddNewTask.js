@@ -6,7 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import FormSubmitButton from '../../components/FormSubmitButton';
 import DurationOptions from '../../components/add-new-task/DurationOptions';
 import { TodayPlanContext } from '../../contexts/TodayPlanContext';
-import Notification, { scheduleNotification, displayTaskDuration, setNotificationTime } from '../../scripts/notificationScripts';
+import Notification, { scheduleNotification, displayTaskDuration, setTaskNotificationTime } from '../../scripts/notificationScripts';
 
 
 export default function AddNewTask({navigation, route}) {
@@ -65,7 +65,7 @@ export default function AddNewTask({navigation, route}) {
     // Set exact time when notification should be shown
     const hour = taskTime[0] + taskTime[1];
     const minute = taskTime[2] + taskTime[3];
-    const date = setNotificationTime(parseInt(hour), parseInt(minute));
+    const date = setTaskNotificationTime(parseInt(hour), parseInt(minute));
 
     // Set notification title
     const notificationTitle = taskTitle + " " + hour + ":" + minute

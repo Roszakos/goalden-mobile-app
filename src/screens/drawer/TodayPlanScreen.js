@@ -7,6 +7,7 @@ import TaskListItem from '../../components/day-plan/TaskListItem';
 import DateDisplay from '../../components/DateDisplay';
 import { storeDayPlans, getDayPlans, searchForPlanToRepeat, sortTasks } from '../../scripts/dayPlanScripts';
 import PlanRepeatModal from '../../components/day-plan/PlanRepeatModal';
+import { cancelNotification } from '../../scripts/notificationScripts';
 
 
 
@@ -75,6 +76,7 @@ export default function DailyPlanScreen(props) {
   const deleteTask = (task) => {
     const changedTasks = tasks.slice();
     changedTasks.splice(tasks.indexOf(task), 1);
+    cancelNotification(task.id);
 
     setTasks(changedTasks);
     storeTodayTasks(changedTasks);
