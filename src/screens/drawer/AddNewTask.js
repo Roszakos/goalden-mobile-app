@@ -6,7 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import FormSubmitButton from '../../components/FormSubmitButton';
 import DurationOptions from '../../components/add-new-task/DurationOptions';
 import { TodayPlanContext } from '../../contexts/TodayPlanContext';
-import Notification, { scheduleNotification, displayTaskDuration, setTaskNotificationTime } from '../../scripts/notificationScripts';
+import { scheduleNotification, displayTaskDuration, setTaskNotificationTime } from '../../scripts/notificationScripts';
 
 
 export default function AddNewTask({navigation, route}) {
@@ -188,7 +188,6 @@ export default function AddNewTask({navigation, route}) {
         </View>
       </View>
       <FormSubmitButton submitForm={submitForm} />
-      <Notification />
     </View>
   )
 }

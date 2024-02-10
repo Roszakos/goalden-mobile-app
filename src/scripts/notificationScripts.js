@@ -1,6 +1,7 @@
 import * as Notifications from "expo-notifications";
 import {  Platform } from "react-native";
 import { useState, useEffect, useRef } from "react";
+import { useNavigation } from '@react-navigation/native'
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -14,6 +15,7 @@ export default function Notification() {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+  const navigation = useNavigation();
 
   useEffect(() => {
     registerForNotificationsAsync();
@@ -21,19 +23,22 @@ export default function Notification() {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
+        console.log(notification);
       });
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
+        if (response.notification.request.trigger.channelId == 'goalden-tasks') {
+          navigation.navigate('TodayPlan');
+        }
       });
-
     return () => {
       Notifications.removeNotificationSubscription(
         notificationListener.current
       );
       Notifications.removeNotificationSubscription(responseListener.current);
     };
+    
   }, []);
 
   return (
