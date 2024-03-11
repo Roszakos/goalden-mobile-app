@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext, useCallback } from 'react';
 import FormTextInput from '../../components/FormTextInput';
 import { TimerPicker } from "react-native-timer-picker";
 import { LinearGradient } from "expo-linear-gradient";
@@ -11,54 +11,76 @@ import { scheduleNotification, displayTaskDuration, setTaskNotificationTime } fr
 
 export default function AddNewTask({navigation, route}) {
   let task = null;
-  if (route.params.action == 'edit') {
-    task = route.params.task;
-  }
 
+  // Initial timers values
+  const [timeInitialHours, setTimeInitialHours] = useState(0);
+  const [timeInitialMinutes, setTimeInitialMinutes] = useState(0);
+  const [durationInitialHours, setDurationInitialHours] = useState(0);
+  const [durationInitialMinutes, setDurationInitialMinutes] = useState(0);
+
+  // Task values
   const [taskTitle, setTaskTitle] = useState(task ? task.title : '');
   const [taskTime, setTaskTime] = useState(task ? task.time : 0)
   const [taskDuration, setTaskDuration] = useState(task ? task.duration : 0);
   const [durationOptionChanged, setDurationOptionChanged] = useState(false);
 
+  // Loading state
+  const [loading, setLoading] = useState(true);
+  
+
   const { tasks, setTasks, storeTodayTasks } = useContext(TodayPlanContext);
 
+  // Timers references
   const durationTimerRef = useRef();
   const taskTimerRef = useRef();
 
   useEffect(() => {
-    if (parseInt(taskDuration) !== 0) {
-      const hours = parseInt(taskDuration[0] + taskDuration[1]);
-      const minutes = parseInt(taskDuration[2] + taskDuration[3]);
-      durationTimerRef.current.setValue({hours: hours, minutes: minutes}, {animated: true});
-    } else {
-      durationTimerRef.current.setValue({hours: 0, minutes: 0}, {animated: true});
+    if (durationTimerRef.current) {
+      if (parseInt(taskDuration) !== 0) {
+        const hours = parseInt(taskDuration[0] + taskDuration[1]);
+        const minutes = parseInt(taskDuration[2] + taskDuration[3]);
+        durationTimerRef.current.setValue({hours: hours, minutes: minutes}, {animated: true});
+      } else {
+        durationTimerRef.current.setValue({hours: 0, minutes: 0}, {animated: true});
+      }
     }
   }, [durationOptionChanged]);
 
   useEffect(() => {
     setTaskDuration(task ? task.duration : 0);
-    setDurationOptionChanged(previousValue => !previousValue);
+    navigation.addListener('blur', () => setLoading(true) );
   }, []);
 
   useEffect(() => {
 		task = null;
-    let hours;
-    let minutes;
+
 		if (route.params.action == 'edit') {
 			task = route.params.task;
       if (parseInt(task.time) !== 0) {
-        hours = parseInt(task.time[0] + task.time[1]);
-        minutes = parseInt(task.time[2] + task.time[3]);
+        setTimeInitialHours(parseInt(task.time[0] + task.time[1]));
+        setTimeInitialMinutes(parseInt(task.time[2] + task.time[3]));
+      } else {
+        setTimeInitialHours(0);
+        setTimeInitialMinutes(0);
       }
-		}
-
+      if (parseInt(task.duration) !== 0) {
+        setDurationInitialHours(parseInt(task.duration[0] + task.duration[1]));
+        setDurationInitialMinutes(parseInt(task.duration[2] + task.duration[3]));
+      } else {
+        setDurationInitialHours(0);
+        setDurationInitialMinutes(0);
+      }
+		} else {
+      setTimeInitialHours(0);
+      setTimeInitialMinutes(0);
+      setDurationInitialHours(0);
+      setDurationInitialMinutes(0);
+    }
+    
 		setTaskTitle(task ? task.title : '');
 		setTaskTime(task ? task.time : 0);
 		setTaskDuration(task ? task.duration : 0);
-    setDurationOptionChanged(previousValue => !previousValue);
-    task ? 
-      taskTimerRef.current.setValue({hours: hours, minutes: minutes}, {animated: false}) :
-      taskTimerRef.current.setValue({hours: 0, minutes: 0}, {animated: false});
+    setLoading(false);
 	}, [route.params])
 
   const submitForm = () => {
@@ -102,6 +124,8 @@ export default function AddNewTask({navigation, route}) {
 
   return (
     <View style={styles.outerContainer}>
+      {
+        !loading ? (
       <View style={styles.container}>
         <FormTextInput 
           label="Task" 
@@ -116,6 +140,8 @@ export default function AddNewTask({navigation, route}) {
         <View style={styles.timePickerContainer}>
           <TimerPicker
             padWithNItems={1}
+            initialHours={timeInitialHours}
+            initialMinutes={timeInitialMinutes}
             hideSeconds
             use24HourPicker
             LinearGradient={LinearGradient}
@@ -157,6 +183,8 @@ export default function AddNewTask({navigation, route}) {
         <View style={styles.timePickerContainer}>
           <TimerPicker
             padWithNItems={1}
+            initialHours={durationInitialHours}
+            initialMinutes={durationInitialMinutes}
             hideSeconds
             LinearGradient={LinearGradient}
             hourLabel="h"
@@ -187,6 +215,12 @@ export default function AddNewTask({navigation, route}) {
           />
         </View>
       </View>
+        ) : (
+      <View style={styles.loadingView}>
+        <Text>Loading...</Text>
+      </View>
+        )
+      }
       <FormSubmitButton submitForm={submitForm} />
     </View>
   )
@@ -237,5 +271,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontWeight: '400',
     fontSize: 16
+  },
+  loadingView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })

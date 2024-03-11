@@ -4,7 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import TodayPlanScreen from '../screens/drawer/TodayPlanScreen';
 import GoalsOrderPicker from '../components/GoalsOrderPicker';
 import GoalListGroupContextProvider from '../contexts/GoalListGroupContext';
-import AddNewGoalScreen from '../screens/goals-stack/AddNewGoalScreen';
+import AddNewGoalScreen from '../screens/goals/AddNewGoalScreen';
 import GoalsTabNavigator from './GoalsTabNavigator';
 import GoalListContextProvider from '../contexts/GoalListContext';
 import TodayPlanContextProvider from '../contexts/TodayPlanContext';
@@ -32,7 +32,7 @@ export default function DrawerNavigator() {
             }}
           >
             <Drawer.Screen 
-              name="GoalList" 
+              name="GoalsTab" 
               component={GoalsTabNavigator} 
               options={{ 
                 title: 'Your Goals', 
@@ -41,41 +41,9 @@ export default function DrawerNavigator() {
               }}
             />
             <Drawer.Screen 
-              name="AddNewGoal" 
-              component={AddNewGoalScreen} 
-              options={({route, navigation}) => ({ 
-                title: route.params ? route.params.headerTitle : 'Set new goal', 
-                drawerItemStyle: {display: 'none'},
-                swipeEnabled: false,
-                headerLeft: () => (
-                  <TouchableWithoutFeedback onPress={() => {
-                    navigation.goBack()
-                  }}>
-                    <Ionicons style={{paddingLeft: 10}} name="arrow-back" size={26} color="black" />
-                  </TouchableWithoutFeedback>
-                )
-              })}
-            />  
-            <Drawer.Screen 
               name="TodayPlan" 
               component={TodayPlanScreen} 
               options={{ title: 'Your plan for today', drawerLabel: 'Today\'s plan'}}
-            />
-            <Drawer.Screen 
-              name="AddNewTask" 
-              component={AddNewTask} 
-              options={({route, navigation}) => ({ 
-                title: route.params ? route.params.headerTitle : 'Add new task',
-                drawerItemStyle: {display: 'none'},
-                swipeEnabled: false,
-                headerLeft: () => (
-                  <TouchableWithoutFeedback onPress={() => {
-                    navigation.goBack()
-                  }}>
-                    <Ionicons style={{paddingLeft: 10}} name="arrow-back" size={26} color="black" />
-                  </TouchableWithoutFeedback>
-                )
-              })}
             />
           </Drawer.Navigator>
         </TodayPlanContextProvider>

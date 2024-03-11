@@ -23,7 +23,6 @@ export default function Notification() {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
-        console.log(notification);
       });
 
     responseListener.current =

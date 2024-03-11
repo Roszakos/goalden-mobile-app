@@ -30,7 +30,7 @@ export default function PlanRepeatModal({showModal, setShowModal, returnSelected
                 <View style={styles.buttonChoose}>
                   <View style={[styles.button, availablePlans[0] ? null : styles.buttonInactive]}>
                     <Text style={styles.textStyle}>
-                      Use yesterday plan
+                      Repeat yesterday plan
                     </Text>
                   </View>
                 </View>
@@ -46,7 +46,7 @@ export default function PlanRepeatModal({showModal, setShowModal, returnSelected
                 <View style={styles.buttonChoose}>
                   <View style={[styles.button, availablePlans[1] ? null : styles.buttonInactive]}>
                     <Text style={styles.textStyle}>
-                      Use last {dayName} plan
+                      Repeat last {dayName} plan
                     </Text>
                   </View>
                 </View>
@@ -113,10 +113,12 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   topButtonsView: {
-    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    //width: '100%',
+    alignItems:'stretch',
     gap: 4,
   },
   buttonCloseView: {
