@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import { GestureHandlerRootView  } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { DefaultTheme, PaperProvider } from 'react-native-paper';
-import DrawerNavigator from './src/navigators/DrawerNavigator';
+import MainStackNavigator from './src/navigators/MainStackNavigator';
 import Notification from './src/scripts/notificationScripts';
 import { useState } from 'react';
 
@@ -65,7 +65,7 @@ export default function App() {
           <NavigationContainer theme={darkThemeEnabled ? DarkTheme : LightTheme}>
             <PaperProvider theme={darkThemeEnabled ? DarkTheme : LightTheme} >
               <Notification />
-              <DrawerNavigator />
+              <MainStackNavigator />
             </PaperProvider>
           </NavigationContainer>
         </GestureHandlerRootView>

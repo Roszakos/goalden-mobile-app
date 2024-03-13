@@ -2,8 +2,9 @@ import { StyleSheet, View, Pressable } from 'react-native'
 import { Text, useTheme, Icon } from 'react-native-paper';
 import React from 'react'
 
-export default function ShowGoalListButton({label, link, borderColor, navigation}) {
+export default function ShowGoalListButton({label, category, borderColor, navigation}) {
   const theme = useTheme();
+  const header = category === 1 || category === 2 ? 'Active Goals' :  'Finished Goals';
   return (
     <Pressable
       style={({pressed}) => [
@@ -13,7 +14,7 @@ export default function ShowGoalListButton({label, link, borderColor, navigation
           borderColor: borderColor
         }
       ]}
-      onPress={()=> console.log('xd')}
+      onPress={()=> navigation.navigate('GoalList', {header: header})}
     >
       <Text 
         style={[styles.buttonText]}

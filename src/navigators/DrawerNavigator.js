@@ -1,25 +1,17 @@
 import { TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import TodayPlanScreen from '../screens/drawer/TodayPlanScreen';
-import GoalsOrderPicker from '../components/GoalsOrderPicker';
-import GoalListGroupContextProvider from '../contexts/GoalListGroupContext';
-import AddNewGoalScreen from '../screens/goals/AddNewGoalScreen';
-import GoalsTabNavigator from './GoalsTabNavigator';
-import GoalListContextProvider from '../contexts/GoalListContext';
-import TodayPlanContextProvider from '../contexts/TodayPlanContext';
-import AddNewTask from '../screens/drawer/AddNewTask';
-import CustomDrawerContent from '../screens/drawer/CustomDrawerContent';
-import ActiveGoalsMain from '../screens/goals/ActiveGoalsMain'
 
+import CustomDrawerContent from '../screens/drawer/CustomDrawerContent';
+
+import ActiveGoalsMain from '../screens/goals/ActiveGoalsMain'
+import TodayPlanScreen from '../screens/drawer/TodayPlanScreen';
 
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigator() {
   return (
-    <GoalListGroupContextProvider>
-      <GoalListContextProvider>
-        <TodayPlanContextProvider>
+    
           <Drawer.Navigator 
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             backBehavior="history"
@@ -38,7 +30,6 @@ export default function DrawerNavigator() {
               options={{ 
                 title: 'Your Goals', 
                 drawerLabel: 'My Goals',
-                headerRight: () => <GoalsOrderPicker />
               }}
             />
             <Drawer.Screen 
@@ -47,8 +38,6 @@ export default function DrawerNavigator() {
               options={{ title: 'Your plan for today', drawerLabel: 'Today\'s plan'}}
             />
           </Drawer.Navigator>
-        </TodayPlanContextProvider>
-      </GoalListContextProvider>
-    </GoalListGroupContextProvider>
+        
   );
 }

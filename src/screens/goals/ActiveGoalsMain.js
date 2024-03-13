@@ -16,7 +16,7 @@ export default function ActiveGoalsMain({navigation}) {
       <View style={[styles.container, {backgroundColor: theme.dark ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)'}]}>
         <View>
           <Text variant="headlineMedium">active</Text>
-          <ShowGoalListButton borderColor={theme.colors.green} label="LONG - TERM GOALS" navigation={navigation} />
+          <ShowGoalListButton borderColor={theme.colors.green} label="LONG - TERM GOALS" navigation={navigation} category={1}/>
           <ShowGoalListButton borderColor={theme.colors.green} label="SHORT - TERM GOALS"/>
         </View>
         <View style={{marginTop: 20}}>
