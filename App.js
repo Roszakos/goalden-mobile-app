@@ -27,6 +27,7 @@ const LightTheme = {
     notification: '#ff80ab', // Kolor tła powiadomień, niezmieniony
     card: "#ffffff", // Jasny kolor kart
     border: "#e0e0e0", // Jasny kolor obramowania
+    green: '#3e9636'
   },
 };
 
@@ -51,7 +52,8 @@ const DarkTheme = {
     backdrop: '#121212', // Kolor tła modalu, menu, itp.
     notification: '#ff80ab', // Kolor tła powiadomień
     card: "#1c1c1c",
-    border: "000000",
+    border: "#000000",
+    green: '#3e9636'
   },
 };
 

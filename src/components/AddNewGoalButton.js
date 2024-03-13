@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, TouchableHighlight } from 'react-native';
+import { Text, useTheme } from 'react-native-paper';
 import React from 'react';
 
 export default function AddNewGoalButton({navigation}) {
+  const { colors } = useTheme();
   return (
     <View style={styles.buttonContainer}>
       <TouchableHighlight 
@@ -9,7 +11,7 @@ export default function AddNewGoalButton({navigation}) {
         onPress={() => {
           navigation.navigate('AddNewGoal', {action: 'create', headerTitle: 'Set new goal', isFinished: false});
         }}>
-        <View style={styles.button} >
+        <View style={[styles.button, {backgroundColor: colors.tertiary}]} >
           <Text style={styles.buttonText}>ADD NEW GOAL</Text>
         </View>
       </TouchableHighlight>
@@ -30,7 +32,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   button: {
-    backgroundColor: '#1371bd',
     width: '100%',
     alignItems: 'center',
     paddingVertical: 18,

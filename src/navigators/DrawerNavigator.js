@@ -10,6 +10,7 @@ import GoalListContextProvider from '../contexts/GoalListContext';
 import TodayPlanContextProvider from '../contexts/TodayPlanContext';
 import AddNewTask from '../screens/drawer/AddNewTask';
 import CustomDrawerContent from '../screens/drawer/CustomDrawerContent';
+import ActiveGoalsMain from '../screens/goals/ActiveGoalsMain'
 
 
 const Drawer = createDrawerNavigator();
@@ -22,7 +23,7 @@ export default function DrawerNavigator() {
           <Drawer.Navigator 
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             backBehavior="history"
-            initialRouteName="GoalList"
+            initialRouteName="GoalCategories"
             screenOptions={{
               drawerStyle: {
                 backgroundColor: '#d49b39',
@@ -32,8 +33,8 @@ export default function DrawerNavigator() {
             }}
           >
             <Drawer.Screen 
-              name="GoalsTab" 
-              component={GoalsTabNavigator} 
+              name="GoalCategories" 
+              component={ActiveGoalsMain} 
               options={{ 
                 title: 'Your Goals', 
                 drawerLabel: 'My Goals',
