@@ -1,3 +1,4 @@
+### :warning: Project still in development
 ### Goal tracker mobile application that helps you reach your destination created with Expo and React Native
 
 
