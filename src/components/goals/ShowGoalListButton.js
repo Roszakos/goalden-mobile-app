@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function ShowGoalListButton({label, category, borderColor, navigation}) {
   const theme = useTheme();
-  const header = category === 1 || category === 2 ? 'Active Goals' :  'Finished Goals';
+  const header = category === 1 ? 'Active Goals' :  'Finished Goals';
   return (
     <Pressable
       style={({pressed}) => [

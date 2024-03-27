@@ -12,6 +12,7 @@ const LightTheme = {
   colors: {
     ...DefaultTheme.colors,
     background: '#ffffff', // Jasne tło
+    backgroundOpacity: 'rgba(255,255,255,0.7)', 
     lighterBackground: '#f0f0f0', // Bardziej jasny kolor dla tła
     surface: '#ffffff', // Jasny kolor dla powierzchni, utrzymujący czystość i świeżość
     lighterSurface: '#dadce3',
@@ -38,6 +39,7 @@ const DarkTheme = {
   colors: {
     ...DefaultTheme.colors,
     background: '#1c1c1c', // Kolor tła
+    backgroundOpacity: 'rgba(0,0,0,0.7)',
     lighterBackground: '#383737',
     surface: '#423e3e', // Lekko jaśniejszy kolor dla powierzchni, aby dodać głębi
     lighterSurface: '#5c5858',

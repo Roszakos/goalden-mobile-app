@@ -28,7 +28,7 @@ export default function GoalCategories({navigation}) {
               borderColor={theme.colors.darkerPrimary} 
               label="REACHED GOALS" 
               navigation={navigation} 
-              category={1}
+              category={2}
             />
           </View>
         </View>
