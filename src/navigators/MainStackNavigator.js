@@ -3,7 +3,6 @@ import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack";
 
 // Contexts
-import GoalListGroupContextProvider from '../contexts/GoalListGroupContext';
 import GoalListContextProvider from '../contexts/GoalListContext';
 import TodayPlanContextProvider from '../contexts/TodayPlanContext';
 
@@ -11,13 +10,12 @@ import TodayPlanContextProvider from '../contexts/TodayPlanContext';
 import DrawerNavigator from "./DrawerNavigator";
 import AddNewGoalScreen from "../screens/goals/AddNewGoalScreen";
 import AddNewTask from "../screens/drawer/AddNewTask";
-import GoalListScreen from "../screens/goals/GoalListScreen"
+import GoalListScreen from "../screens/goals/GoalList/GoalListScreen"
 
 const Stack = createStackNavigator();
 
 export default function MainStackNavigator() {
   return (
-    <GoalListGroupContextProvider>
       <GoalListContextProvider>
         <TodayPlanContextProvider>
           <Stack.Navigator
@@ -48,7 +46,6 @@ export default function MainStackNavigator() {
           </Stack.Navigator>
         </TodayPlanContextProvider>
       </GoalListContextProvider>
-    </GoalListGroupContextProvider>
   )
 }
 

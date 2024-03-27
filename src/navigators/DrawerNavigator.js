@@ -4,7 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import CustomDrawerContent from '../screens/drawer/CustomDrawerContent';
 
-import ActiveGoalsMain from '../screens/goals/ActiveGoalsMain'
+import GoalCategories from '../screens/goals/GoalCategories'
 import TodayPlanScreen from '../screens/drawer/TodayPlanScreen';
 
 const Drawer = createDrawerNavigator();
@@ -18,15 +18,14 @@ export default function DrawerNavigator() {
             initialRouteName="GoalCategories"
             screenOptions={{
               drawerStyle: {
-                backgroundColor: '#d49b39',
                 width: 240,
               },
-              swipeEdgeWidth: 100
+              swipeEdgeWidth: 150
             }}
           >
             <Drawer.Screen 
               name="GoalCategories" 
-              component={ActiveGoalsMain} 
+              component={GoalCategories} 
               options={{ 
                 title: 'Your Goals', 
                 drawerLabel: 'My Goals',

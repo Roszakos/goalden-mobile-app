@@ -5,7 +5,7 @@ import React from 'react'
 import ShowGoalListButton from '../../components/goals/ShowGoalListButton'
 import AddNewGoalButton from '../../components/AddNewGoalButton'
 
-export default function ActiveGoalsMain({navigation}) {
+export default function GoalCategories({navigation}) {
   const imageSrc = require('../../../assets/goalden-background.webp');
   const theme = useTheme();
   return (
@@ -14,15 +14,23 @@ export default function ActiveGoalsMain({navigation}) {
       source={imageSrc}
     >
       <View style={[styles.container, {backgroundColor: theme.dark ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)'}]}>
-        <View>
-          <Text variant="headlineMedium">active</Text>
-          <ShowGoalListButton borderColor={theme.colors.green} label="LONG - TERM GOALS" navigation={navigation} category={1}/>
-          <ShowGoalListButton borderColor={theme.colors.green} label="SHORT - TERM GOALS"/>
-        </View>
-        <View style={{marginTop: 20}}>
-          <Text variant="headlineMedium">finished</Text>
-          <ShowGoalListButton borderColor={theme.colors.darkerPrimary} label="LONG - TERM GOALS"/>
-          <ShowGoalListButton borderColor={theme.colors.darkerPrimary} label="SHORT - TERM GOALS"/>
+        <View style={styles.categoriesView}>
+          <View>
+            <ShowGoalListButton 
+              borderColor={theme.colors.green} 
+              label="ACTIVE GOALS" 
+              navigation={navigation} 
+              category={1}
+            />
+          </View>
+          <View style={{marginTop: 20}}>
+            <ShowGoalListButton 
+              borderColor={theme.colors.darkerPrimary} 
+              label="REACHED GOALS" 
+              navigation={navigation} 
+              category={1}
+            />
+          </View>
         </View>
       </View>
       <AddNewGoalButton navigation={navigation} />
@@ -37,5 +45,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: '5%'
+  },
+  categoriesView: {
+    //flexDirection: 'row'
   }
 })

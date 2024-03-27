@@ -14,7 +14,7 @@ export default function ShowGoalListButton({label, category, borderColor, naviga
           borderColor: borderColor
         }
       ]}
-      onPress={()=> navigation.navigate('GoalList', {header: header})}
+      onPress={()=> navigation.navigate('GoalList', {header: header, category: category})}
     >
       <Text 
         style={[styles.buttonText]}
@@ -33,9 +33,8 @@ export default function ShowGoalListButton({label, category, borderColor, naviga
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    width: '100%',
     borderWidth: 2,
-    padding: 15,
+    padding: 35,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

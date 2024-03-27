@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const GoalListContext = createContext([]);
@@ -6,6 +6,24 @@ export const GoalListContext = createContext([]);
 export default function GoalListContextProvider({children}) {
     const [activeGoalList, setActiveGoalList] = useState([]);
     const [finishedGoalList, setFinishedGoalList] = useState([]);
+
+    useEffect(() => {
+        getActiveGoals().then((response) => {
+        //   response.sort((a, b) => {
+        //     if (a.finishDate < b.finishDate) {
+        //       return -1;
+        //     } else if (b.finishDate < a.finishDate) {
+        //       return 1;
+        //     }
+        //     return 0;
+        //   })
+          setActiveGoalList(response);
+        });
+        
+        getFinishedGoals().then((response) => {
+            setFinishedGoalList(response);
+        })
+    }, []);
 
     /** AsyncStorage functions */
 
