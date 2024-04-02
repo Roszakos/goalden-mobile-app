@@ -66,7 +66,7 @@ export default function App() {
       notification: '#ff80ab', // Kolor tła powiadomień
       card: "#1c1c1c",
       border: "#000000",
-      green: '#3e9636'
+      green: '#3e9636',
     }
   };
 
