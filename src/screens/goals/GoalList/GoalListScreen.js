@@ -69,7 +69,7 @@ export default function GoalListScreen(props) {
           {
             highPriorityGoalsStatus == "" ? (
               <View>
-                <Text>High priority</Text>
+                <Text variant="titleLarge" style={styles.carouselLabel}>High priority</Text>
                 <GoalsCarousel goals={highPriorityGoals}/>
               </View>
             ) : (
@@ -77,12 +77,13 @@ export default function GoalListScreen(props) {
             )
           }
         </View>
-        <View style={[styles.lowGoalsView, styles.goalsView]}>
+        <View style={[styles.lowGoalsView, styles.goalsView, {backgroundColor: theme.colors.backgroundOpacity}]}>
+          <Text variant="titleLarge" style={styles.carouselLabel}>Low priority</Text>
           {
             lowPriorityGoalsStatus == "" ? (
               <GoalsCarousel goals={lowPriorityGoals}/>
             ) : (
-              <Text>{lowPriorityGoalsStatus}</Text>
+              <Text style={{marginTop: 50}}>{lowPriorityGoalsStatus}</Text>
             )
           }
         </View>
@@ -106,11 +107,10 @@ const styles = StyleSheet.create({
   goalsView: {
     width: '100%',
     marginTop: 15,
-    justifyContent: 'center',
     alignItems: 'center',
     height: 200,
     borderTopWidth: 2,
-    borderBottomWidth: 2,
+    borderBottomWidth: 2
   },
   highGoalsView: {
     borderTopColor: 'red',
@@ -119,5 +119,11 @@ const styles = StyleSheet.create({
   lowGoalsView: {
     borderTopColor: 'orange',
     borderBottomColor: 'orange',
+  },
+  carouselLabel: {
+    alignSelf: 'center',
+    marginTop: 12,
+    textTransform: 'uppercase',
+    fontFamily: 'Josefin'
   }
 });
