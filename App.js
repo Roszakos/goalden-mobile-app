@@ -7,7 +7,10 @@ import Notification from './src/scripts/notificationScripts';
 import { useState } from 'react';
 import { useFonts } from 'expo-font';
 
-
+// Redux store
+import {store, persistor} from './src/store/store.js'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
 export default function App() { 
   const [darkThemeEnabled, setDarkThemeEnabled] = useState(true);
@@ -72,12 +75,16 @@ export default function App() {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <NavigationContainer theme={darkThemeEnabled ? DarkTheme : LightTheme}>
-            <PaperProvider theme={darkThemeEnabled ? DarkTheme : LightTheme} >
-              <Notification />
-              <MainStackNavigator />
-            </PaperProvider>
-          </NavigationContainer>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <NavigationContainer theme={darkThemeEnabled ? DarkTheme : LightTheme}>
+                <PaperProvider theme={darkThemeEnabled ? DarkTheme : LightTheme} >
+                  <Notification />
+                  <MainStackNavigator />
+                </PaperProvider>
+              </NavigationContainer>
+              </PersistGate>
+          </Provider>
         </GestureHandlerRootView>
     );
 }

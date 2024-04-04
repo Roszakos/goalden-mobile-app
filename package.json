@@ -15,6 +15,7 @@
     "@react-navigation/material-top-tabs": "^6.6.5",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/stack": "^6.3.20",
+    "@reduxjs/toolkit": "^2.2.3",
     "core-js": "^3.36.0",
     "expo": "~49.0.15",
     "expo-font": "~11.4.0",
@@ -33,7 +34,9 @@
     "react-native-screens": "~3.22.0",
     "react-native-svg": "13.9.0",
     "react-native-tab-view": "^3.5.2",
-    "react-native-timer-picker": "^1.5.1"
+    "react-native-timer-picker": "^1.5.1",
+    "react-redux": "^9.1.0",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
