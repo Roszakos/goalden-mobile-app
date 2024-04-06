@@ -1,26 +1,20 @@
-import { StyleSheet, Text, View, TextInput } from 'react-native'
-import React, {useState} from 'react'
+import { StyleSheet, View } from 'react-native'
+import { Text, TextInput } from 'react-native-paper'
+import React from 'react'
 
-export default function FormTextInput({label, placeholder, updateState, value, inputHeight, labelSubtext}) {
-	const [inputBorderWidth, setInputBorderWidth] = useState(1);
-	const inputHeightStyle = inputHeight ?? 70;
-	const additionalLabel = labelSubtext ?? '';
+export default function FormTextInput({labelText, placeholder, updateState, value}) {
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-				<Text style={styles.goalTitleInputHeader}>{label}</Text>
-				<Text style={styles.labelSubtext}>{additionalLabel}</Text>
-			</View>
         <TextInput 
-          style={[styles.goalTitleInput, {borderWidth: inputBorderWidth}, {minHeight: inputHeightStyle}]}
-          placeholder={placeholder}
-          onChangeText={newText => updateState(newText)}
-          defaultValue={value}
-          multiline={true}
-					textAlignVertical="top"
-					onFocus={() => setInputBorderWidth(2) }
-					onBlur={() => setInputBorderWidth(1) }
-					required={true}
+			mode="outlined"
+			label={<Text style={{fontFamily: 'Josefin'}}>{labelText}</Text>}
+			placeholder={placeholder}
+			outlineColor='#6f7070'
+			onChangeText={newText => updateState(newText)}
+			defaultValue={value}
+			numberOfLines={3}
+			multiline={true}
+			required={true}
         />
     </View>
   )
@@ -29,26 +23,5 @@ export default function FormTextInput({label, placeholder, updateState, value, i
 const styles = StyleSheet.create({
 	container: {
 		width: '100%'
-	},
-	goalTitleInput: {
-		width: '98%',
-		borderColor: '#222',
-		padding: 10,
-		borderRadius: 5,
-		fontSize: 17,
-		height: 'fit-content',
-	},
-	goalTitleInputHeader: {
-		fontWeight: '600',
-		paddingBottom: 4,
-		fontSize: 18
-	},
-	labelSubtext: {
-		fontWeight: '400',
-    color: 'gray'
-	},
-	headerContainer: {
-		flexDirection: 'row',
-		gap: 4
 	}
 })

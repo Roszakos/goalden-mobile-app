@@ -3,13 +3,17 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Text, useTheme } from 'react-native-paper';
 import "core-js/actual/array/group-by";
 
+import { useSelector } from 'react-redux'
+
+import GoalDetailsModal from '../GoalDetailsModal';
 import AddNewGoalButton from '../../../components/AddNewGoalButton';
 import { GoalListContext } from '../../../contexts/GoalListContext';
 import GoalsCarousel from "../../../components/goals/GoalsCarousel";
 
 
 export default function GoalListScreen(props) {
-  const { activeGoalList, finishedGoalList } = useContext(GoalListContext);
+  //const { activeGoalList, finishedGoalList } = useContext(GoalListContext);
+  const activeGoals = useSelector(state => state.activeGoals);
 
   const [highPriorityGoals, setHighPriorityGoals] = useState([]);
   const [lowPriorityGoals, setLowPriorityGoals] = useState([]);
@@ -17,13 +21,21 @@ export default function GoalListScreen(props) {
   const [lowPriorityGoalsStatus, setLowPriorityGoalsStatus] = useState('Loading...');
   const [highPriorityGoalsStatus, setHighPriorityGoalsStatus] = useState('Loading...');
 
+  const [editGoal, setEditGoal] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
   const imageSrc = require('../../../../assets/goalden-background.webp');
   const theme = useTheme();
+
+  const showGoalDetails = (goal) => {
+    setEditGoal(goal);
+    setShowModal(true);
+  }
 
   useEffect(
     () => {
       if (props.route.params.category === 1) {
-        const goals = activeGoalList.slice();
+        const goals = activeGoals.list.slice();
         goals.sort((a, b) => {
           if (a.finishDate < b.finishDate) {
             return -1;
@@ -81,13 +93,14 @@ export default function GoalListScreen(props) {
           <Text variant="titleLarge" style={[styles.carouselLabel, {color: 'orange'}]}>Low priority</Text>
           {
             lowPriorityGoalsStatus == "" ? (
-              <GoalsCarousel goals={lowPriorityGoals}/>
+              <GoalsCarousel showGoalDetails={showGoalDetails} goals={lowPriorityGoals}/>
             ) : (
               <Text style={{marginTop: 50}}>{lowPriorityGoalsStatus}</Text>
             )
           }
         </View>
-        <AddNewGoalButton navigation={props.navigation} />
+        <GoalDetailsModal goal={editGoal} showModal={showModal} setShowModal={setShowModal} />
+        <AddNewGoalButton showGoalDetails={showGoalDetails} />
       </View>
     </ImageBackground>
   );

@@ -1,75 +1,70 @@
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import { StyleSheet, View, Pressable } from 'react-native';
+import { Text, useTheme } from 'react-native-paper';
+import React from 'react';
 
-export default function PriorityPicker({goalPriority, changeGoalPriority}) {
-  const [chosenPriority, setChosenPriority] = useState(goalPriority);
-
-  useEffect(() => {
-    setChosenPriority(goalPriority)
-  }, [goalPriority]);
-
+export default function PriorityPicker({goalPriority, setGoalPriority}) {
+  const { colors } = useTheme();
   return (
-    <View style={{width: '100%'}}>
-      <Text style={styles.labelText}>How important is it for you?</Text>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
+      <Text style={styles.labelText}>Priority</Text>
       <View style={styles.contentContainer}>
-        <TouchableHighlight 
-          style={[styles.touchableWrapper, chosenPriority == 1 ? '' : styles.touchableInactive]}
+        <Pressable 
+          style={[styles.touchableWrapper, goalPriority == 1 ? '' : styles.touchableInactive]}
           onPress={() => {
-            changeGoalPriority(1);
-            setChosenPriority(1);
+            setGoalPriority(1);
           }}
         >
-          <View style={[styles.priorityItem, {backgroundColor: '#d4d13f'}]}>
-            <Text style={styles.priorityItemText}>A little</Text>
+          <View style={[styles.priorityItem, {backgroundColor: 'orange'}]}>
+            <Text style={styles.priorityItemText}>Low</Text>
           </View>
-        </TouchableHighlight>
-        <TouchableHighlight 
-          style={[styles.touchableWrapper, chosenPriority == 2 ? '' : styles.touchableInactive]}
+        </Pressable>
+        <Pressable 
+          style={[styles.touchableWrapper, goalPriority == 3 ? '' : styles.touchableInactive]}
           onPress={() => {
-            changeGoalPriority(2);
-            setChosenPriority(2);
+            setGoalPriority(3);
           }}
         >
-          <View style={[styles.priorityItem, {backgroundColor: '#e0890d'}]}>
-            <Text style={styles.priorityItemText}>Medium</Text>
+          <View style={[styles.priorityItem, {backgroundColor: 'red'}]}>
+            <Text style={styles.priorityItemText}>High</Text>
           </View>
-        </TouchableHighlight>
-        <TouchableHighlight 
-          style={[styles.touchableWrapper, chosenPriority == 3 ? '' : styles.touchableInactive]}
-          onPress={() => {
-            changeGoalPriority(3);
-            setChosenPriority(3);
-          }}
-        >
-          <View style={[styles.priorityItem, {backgroundColor: '#db3e1f'}]}>
-            <Text style={styles.priorityItemText}>Very</Text>
-          </View>
-        </TouchableHighlight>
+        </Pressable>
       </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    marginTop: 20,
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "#6f7070"
+  },
   labelText: {
-		fontWeight: '600'
+    textAlign: 'center',
+    fontFamily: 'Josefin',
+    letterSpacing: 0.8,
+		fontWeight: '600',
+    fontSize: 16
 	},
   touchableWrapper: {
-    width: '33%',
+    width: '48%',
   },
   contentContainer: {
-    marginTop: 8,
+    marginTop: 12,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'stretch'
   },
   priorityItem: {
-    
     paddingHorizontal: 10,
     paddingVertical: 10,
   },
   priorityItemText: {
-    fontSize: 12,
+    fontSize: 14,
     textAlign: 'center'
   },
   touchableInactive: {

@@ -8,7 +8,6 @@ import TodayPlanContextProvider from '../contexts/TodayPlanContext';
 
 // Screens
 import DrawerNavigator from "./DrawerNavigator";
-import AddNewGoalScreen from "../screens/goals/AddNewGoalScreen";
 import AddNewTask from "../screens/drawer/AddNewTask";
 import GoalListScreen from "../screens/goals/GoalList/GoalListScreen"
 
@@ -26,10 +25,6 @@ export default function MainStackNavigator() {
             <Stack.Screen
               name="MainDrawer"
               component={DrawerNavigator}
-            />
-            <Stack.Screen
-              name="GoalDetails"
-              component={AddNewGoalScreen}
             />
             <Stack.Screen
               name="TaskDetails"

@@ -4,11 +4,10 @@ import { Text, Icon, useTheme } from 'react-native-paper';
 import Carousel from 'react-native-reanimated-carousel';
 import { LinearGradient } from 'expo-linear-gradient';
  
-export default function GoalsCarousel({goals}) {
+export default function GoalsCarousel({goals, showGoalDetails}) {
   const width = Dimensions.get('window').width;
   const { colors } = useTheme();
   const carousel = useRef();
-  console.log(goals);
     return (
         <View 
 			style={{
@@ -33,7 +32,10 @@ export default function GoalsCarousel({goals}) {
 				scrollAnimationDuration={500}
 				renderItem={({ index }) => (
 					<View style={[styles.itemContainer, {backgroundColor: colors.lighterBackground}]}>
-						<Pressable style={styles.pressable}>
+						<Pressable 
+							style={styles.pressable}
+							onPress={() => showGoalDetails(goals[index])}	
+						>
 							<View style={[styles.cardContent]}>
 								<View style={[styles.topBar, {backgroundColor: colors.lighterBackground}]}>
 									<Text 

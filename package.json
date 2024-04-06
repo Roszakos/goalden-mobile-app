@@ -36,7 +36,8 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-timer-picker": "^1.5.1",
     "react-redux": "^9.1.0",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "@react-native-community/datetimepicker": "7.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
