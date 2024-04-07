@@ -1,20 +1,27 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { View, Modal, StyleSheet, Pressable } from 'react-native';
 import { Text, useTheme, ActivityIndicator } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
 
 // My components
 import GoalDetails from './GoalDetails';
 import GoalMilestones from './GoalMilestones';
 
+// Store actions
+import { add, destroy, update } from '../../features/goals/activeGoalsSlice';
+
 export default function GoalDetailsModal({goal, showModal, setShowModal}) {
     const {colors} = useTheme();
-    const [currentScreen, setCurrentScreen] = useState(1);
+    const dispatch = useDispatch();
 
-    const [, forceUpdate] = useReducer(x => x + 1, 0);
+    const [currentScreen, setCurrentScreen] = useState(1);
 
     const [goalTitle, setGoalTitle] = useState('');
     const [goalFinishDate, setGoalFinishDate] = useState(null);
     const [goalPriority, setGoalPriority] = useState(1);
+
+    const [action, setAction] = useState('add');
+    const [isDeletable, setIsDeletable] = useState(false)
 
     const [loading, setLoading] = useState(true);
 
@@ -24,13 +31,45 @@ export default function GoalDetailsModal({goal, showModal, setShowModal}) {
             setGoalTitle(goal.title);
             setGoalFinishDate(goal.finishDate);
             setGoalPriority(goal.priority);
+            setAction('edit');
+            setIsDeletable(true);
         } else {
             setGoalTitle('');
             setGoalFinishDate(null);
             setGoalPriority(1);
+            setAction('add');
         }
         setTimeout(() => setLoading(false), 100);
     }, [goal])
+
+    const saveGoal = () => {
+        if (action === 'add') {
+            // Add new goal
+            dispatch(add({
+                id: Math.random(),
+                title: goalTitle,
+                priority: goalPriority,
+                finishDate: goalFinishDate
+            }));
+        } else if (action === 'edit') {
+            // Update existing goal
+            dispatch(update({
+                id: goal.id,
+                title: goalTitle,
+                priority: goalPriority,
+                finishDate: goalFinishDate
+            }));
+        }
+        setShowModal(false);
+    }
+
+    const deleteGoal = () => {
+        if (goal) {
+            dispatch(destroy(goal));
+        }
+        setShowModal(false);
+    }
+
     return (
         <Modal
             animationType="slide"
@@ -67,6 +106,9 @@ export default function GoalDetailsModal({goal, showModal, setShowModal}) {
                                             setGoalFinishDate={setGoalFinishDate}
                                             goalPriority={goalPriority}
                                             setGoalPriority={setGoalPriority}
+                                            saveGoal={saveGoal}
+                                            deleteGoal={deleteGoal}
+                                            isDeletable={isDeletable}
                                         />
                                     ) : (
                                         <GoalMilestones />

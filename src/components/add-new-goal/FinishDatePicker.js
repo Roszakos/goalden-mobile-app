@@ -11,7 +11,7 @@ export default function DatePicker({goalFinishDate, setGoalFinishDate}) {
 
   const onChange = (event, selectedDate) => {
     if (event.type === 'set') {
-        setGoalFinishDate(moment(selectedDate));
+        setGoalFinishDate(moment(selectedDate).valueOf());
     }
     setShowDatePicker(false);
   }

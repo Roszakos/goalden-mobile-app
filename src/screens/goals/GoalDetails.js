@@ -11,7 +11,8 @@ export default function GoalDetails({
         goalTitle, setGoalTitle, 
         goalFinishDate, setGoalFinishDate, 
         goalPriority, setGoalPriority, 
-        saveGoal
+        saveGoal, deleteGoal,
+        isDeletable
     }) {
     const {colors} = useTheme();
 
@@ -21,6 +22,16 @@ export default function GoalDetails({
             <PriorityPicker goalPriority={goalPriority} setGoalPriority={setGoalPriority} />
             <FinishDatePicker goalFinishDate={goalFinishDate} setGoalFinishDate={setGoalFinishDate}/>
             <View style={styles.buttonContainer}>
+                {
+                    isDeletable && (
+                        <Pressable 
+                            style={{backgroundColor: '#d9201a', borderRadius: 10}}
+                            onPress={deleteGoal}
+                        >
+                            <Text style={styles.buttonText}>DELETE</Text>
+                        </Pressable>
+                    )
+                }
                 <Pressable 
                     style={{backgroundColor: colors.darkerPrimary, borderRadius: 10}}
                     onPress={saveGoal}
@@ -38,7 +49,7 @@ const styles = StyleSheet.create({
         width: '90%',
         alignSelf: 'center',
         alignItems: 'center',
-
+        minHeight: '100%'
     },
     buttonContainer: {
         width: '100%',
@@ -46,6 +57,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'flex-end',
         marginTop: 15,
+        flexDirection: 'row',
+        gap: 10
     },
     buttonText: {
         padding: 15,

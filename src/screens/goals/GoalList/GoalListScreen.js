@@ -7,13 +7,12 @@ import { useSelector } from 'react-redux'
 
 import GoalDetailsModal from '../GoalDetailsModal';
 import AddNewGoalButton from '../../../components/AddNewGoalButton';
-import { GoalListContext } from '../../../contexts/GoalListContext';
 import GoalsCarousel from "../../../components/goals/GoalsCarousel";
 
 
 export default function GoalListScreen(props) {
-  //const { activeGoalList, finishedGoalList } = useContext(GoalListContext);
   const activeGoals = useSelector(state => state.activeGoals);
+  const finishedGoals = useSelector(state => state.finishedGoals);
 
   const [highPriorityGoals, setHighPriorityGoals] = useState([]);
   const [lowPriorityGoals, setLowPriorityGoals] = useState([]);
@@ -47,7 +46,7 @@ export default function GoalListScreen(props) {
         setLowPriorityGoals(goals.filter((goal) => goal.priority === 1))
         setHighPriorityGoals(goals.filter((goal) => goal.priority === 3))
       } else {
-        const goals = finishedGoalList.slice();
+        const goals = finishedGoals.list.slice();
         goals.sort((a, b) => {
           if (a.finishDate < b.finishDate) {
             return -1;
@@ -60,7 +59,7 @@ export default function GoalListScreen(props) {
         setHighPriorityGoals(goals.filter((goal) => goal.priority === 3))
       }
     }, 
-    []
+    [activeGoals, finishedGoals]
   );
 
   useEffect(() => {
@@ -78,16 +77,16 @@ export default function GoalListScreen(props) {
     >
       <View style={[styles.container, {backgroundColor: theme.dark ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)'}]}>
         <View style={[styles.highGoalsView, styles.goalsView, {backgroundColor: theme.colors.backgroundOpacity}]}>
-          {
-            highPriorityGoalsStatus == "" ? (
-              <View>
-                <Text variant="titleLarge" style={[styles.carouselLabel, {color: 'red'}]}>High priority</Text>
-                <GoalsCarousel goals={highPriorityGoals}/>
-              </View>
-            ) : (
-              <Text>{highPriorityGoalsStatus}</Text>
-            )
-          }
+            <View>
+              <Text variant="titleLarge" style={[styles.carouselLabel, {color: 'red'}]}>High priority</Text>
+              {
+                highPriorityGoalsStatus == "" ? (
+                  <GoalsCarousel showGoalDetails={showGoalDetails} goals={highPriorityGoals}/>
+                ) : (
+                  <Text style={{marginTop: 50}}>{highPriorityGoalsStatus}</Text>
+                )
+              }
+            </View>
         </View>
         <View style={[styles.lowGoalsView, styles.goalsView, {backgroundColor: theme.colors.backgroundOpacity}]}>
           <Text variant="titleLarge" style={[styles.carouselLabel, {color: 'orange'}]}>Low priority</Text>
