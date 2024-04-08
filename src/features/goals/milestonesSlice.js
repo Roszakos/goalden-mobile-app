@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createSelector } from '@reduxjs/toolkit'
 
 export const milestonesSlice = createSlice({
   name: 'milestones',
@@ -20,4 +20,12 @@ export const milestonesSlice = createSlice({
 
 export const { add, destroy, update } = milestonesSlice.actions;
 
-export default milestonesSlice.reducer
+export default milestonesSlice.reducer;
+
+const selectMilestones = state => state.milestones.list;
+const goalId = (state, goalId) => goalId;
+
+export const getMilestonesByGoalId = createSelector(
+  [selectMilestones, goalId],
+  (milestones, goalId) => milestones.filter(milestone => milestone.goalId == goalId)
+)

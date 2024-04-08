@@ -17,6 +17,7 @@ export default function App() {
 
   const [fontsLoaded] = useFonts({
     'Josefin': require('./assets/fonts/JosefinSans-SemiBold.ttf'),
+    'Josefin-regular': require('./assets/fonts/JosefinSans-Regular.ttf'),
     'TirtoWritter': require('./assets/fonts/TirtoWritterRegular-Eajrl.ttf'),
   });
   

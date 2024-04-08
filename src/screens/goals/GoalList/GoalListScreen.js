@@ -45,6 +45,7 @@ export default function GoalListScreen(props) {
         })
         setLowPriorityGoals(goals.filter((goal) => goal.priority === 1))
         setHighPriorityGoals(goals.filter((goal) => goal.priority === 3))
+        console.log(goals);
       } else {
         const goals = finishedGoals.list.slice();
         goals.sort((a, b) => {

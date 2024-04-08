@@ -38,6 +38,7 @@ export default function GoalDetailsModal({goal, showModal, setShowModal}) {
             setGoalFinishDate(null);
             setGoalPriority(1);
             setAction('add');
+            setIsDeletable(false);
         }
         setTimeout(() => setLoading(false), 100);
     }, [goal])
@@ -82,11 +83,17 @@ export default function GoalDetailsModal({goal, showModal, setShowModal}) {
             <View style={[styles.centeredView, {backgroundColor: 'rgba(0,0,0,0.8)'}]}>
                 <View style={[styles.modalView, {backgroundColor: colors.lighterBackground}]}>
                     <View style={[styles.topBar, {backgroundColor: colors.background}]}>
-                        <Pressable style={[styles.navigationTabView, {borderBottomColor: currentScreen === 1 ? colors.primary : 'grey'}]}>
+                        <Pressable 
+                            style={[styles.navigationTabView, {borderBottomColor: currentScreen === 1 ? colors.primary : 'grey'}]}
+                            onPress={() => setCurrentScreen(1)}
+                        >
                             <Text>DETAILS</Text>
                         </Pressable>
                         <View style={{borderRightWidth: 1, opacity: 0.4}}></View>
-                        <Pressable style={[styles.navigationTabView, {borderBottomColor: currentScreen === 2 ? colors.primary : 'grey'}]}>
+                        <Pressable 
+                            style={[styles.navigationTabView, {borderBottomColor: currentScreen === 2 ? colors.primary : 'grey'}]}
+                            onPress={() => setCurrentScreen(2)}
+                        >
                             <Text>MILESTONES</Text>
                         </Pressable>
                     </View>
@@ -111,7 +118,7 @@ export default function GoalDetailsModal({goal, showModal, setShowModal}) {
                                             isDeletable={isDeletable}
                                         />
                                     ) : (
-                                        <GoalMilestones />
+                                        <GoalMilestones goal={goal} />
                                     )
                                 }
                             </View>
