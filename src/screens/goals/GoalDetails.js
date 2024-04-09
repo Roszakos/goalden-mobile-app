@@ -12,13 +12,14 @@ export default function GoalDetails({
         goalFinishDate, setGoalFinishDate, 
         goalPriority, setGoalPriority, 
         saveGoal, deleteGoal,
+        inputError, setInputError,
         isDeletable
     }) {
     const {colors} = useTheme();
 
     return (
         <ScrollView contentContainerStyle={styles.centeredView}>
-            <FormTextInput labelText="Goal title" value={goalTitle} updateState={setGoalTitle}/>
+            <FormTextInput labelText="Goal title" value={goalTitle} updateState={setGoalTitle} error={inputError} setError={setInputError}/>
             <PriorityPicker goalPriority={goalPriority} setGoalPriority={setGoalPriority} />
             <FinishDatePicker goalFinishDate={goalFinishDate} setGoalFinishDate={setGoalFinishDate}/>
             <View style={styles.buttonContainer}>

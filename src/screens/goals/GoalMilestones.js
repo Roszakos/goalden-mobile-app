@@ -22,16 +22,21 @@ export default function GoalMilestones({goal}) {
     const [loading, setLoading] = useState(true);
 
     const [newMilestoneTask, setNewMilestoneTask] = useState('');
+    const [inputError, setInputError] = useState(false);
 
     const addNewMilestone = () => {
-        dispatch(add({
-            id: Math.random(),
-            goalId: goal.id,
-            task: newMilestoneTask,
-            isFinished: false,
-            createdAt: Date.now()
-        }));
-        setNewMilestoneTask('');
+        if (newMilestoneTask) {
+            dispatch(add({
+                id: Math.random(),
+                goalId: goal.id,
+                task: newMilestoneTask,
+                isFinished: false,
+                createdAt: Date.now()
+            }));
+            setNewMilestoneTask('');
+        } else {
+            setInputError(true);
+        }
     }
 
     useEffect(() => {
@@ -66,8 +71,12 @@ export default function GoalMilestones({goal}) {
                             style={styles.textInput}
                             label={<Text style={{fontFamily: 'Josefin'}}>Add new milestone</Text>}
                             outlineColor='#6f7070'
-                            onChangeText={newText => setNewMilestoneTask(newText)}
+                            onChangeText={newText => {
+                                setNewMilestoneTask(newText);
+                                setInputError(false);
+                            }}
                             value={newMilestoneTask}
+                            error={inputError}
                             numberOfLines={2}
                             multiline={true}
                             required={true}
@@ -94,7 +103,6 @@ export default function GoalMilestones({goal}) {
                                 )
                             })
                         }
-                        {/* <MilestoneListItem isFinished={false} label="Run 10 miles"/> */}
                         </View>
                     </View>
                 )

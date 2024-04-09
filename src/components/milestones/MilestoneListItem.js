@@ -11,20 +11,27 @@ export default function MilestoneListItem({milestone}) {
     const dispatch = useDispatch();
 
     const [task, setTask] = useState(milestone.task);
-    const [editing, setEditing] = useState(true);
+    const [editing, setEditing] = useState(false);
+
+    const [taskError, setTaskError] = useState(false);
 
     const deleteMilestone = () => {
         dispatch(destroy(milestone));
     }
 
     const updateMilestone = () => {
-        dispatch(update({
-            id: milestone.id,
-            goalId: milestone.goalId,
-            task: task,
-            isFinished: isFinished,
-            createdAt: milestone.createdAt
-        }))
+        if (task) {
+            dispatch(update({
+                id: milestone.id,
+                goalId: milestone.goalId,
+                task: task,
+                isFinished: milestone.isFinished,
+                createdAt: milestone.createdAt
+            }));
+            setEditing(false);
+        } else {
+            setTaskError(true);
+        }
     }
 
     const updateFinishState = (isFinished) => {
@@ -35,6 +42,7 @@ export default function MilestoneListItem({milestone}) {
             isFinished: isFinished,
             createdAt: milestone.createdAt
         }))
+        setEditing(false);
     }
 
     return (
@@ -47,10 +55,14 @@ export default function MilestoneListItem({milestone}) {
                                 mode="outlined"
                                 style={styles.textInput}
                                 outlineColor='#6f7070'
-                                onChangeText={newText => setTask(newText)}
+                                onChangeText={newText => {
+                                    setTaskError(false);
+                                    setTask(newText);
+                                }}
                                 value={task}
                                 numberOfLines={2}
                                 multiline={true}
+                                error={taskError}
                             />
                         </View>
                     ) : (
@@ -98,7 +110,7 @@ export default function MilestoneListItem({milestone}) {
                                         <Text style={styles.buttonText}>CANCEL</Text>
                                     </Pressable>
                                     <Pressable 
-                                        style={[styles.button, {backgroundColor: '#28ad3c'}]}
+                                        style={[styles.button, {backgroundColor: colors.darkerPrimary}]}
                                         onPress={updateMilestone}
                                     >
                                         <Text style={styles.buttonText}>SAVE</Text>

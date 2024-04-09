@@ -1,9 +1,8 @@
-import { StyleSheet, View, ImageBackground, Pressable } from 'react-native'
-import { Text, useTheme, Icon } from 'react-native-paper';
+import { StyleSheet, View, ImageBackground } from 'react-native'
+import { useTheme } from 'react-native-paper';
 import React from 'react'
 
 import ShowGoalListButton from '../../components/goals/ShowGoalListButton'
-import AddNewGoalButton from '../../components/AddNewGoalButton'
 
 export default function GoalCategories({navigation}) {
   const imageSrc = require('../../../assets/goalden-background.webp');
@@ -33,7 +32,6 @@ export default function GoalCategories({navigation}) {
           </View>
         </View>
       </View>
-      <AddNewGoalButton navigation={navigation} />
     </ImageBackground>
   )
 }
@@ -45,8 +43,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: '5%'
-  },
-  categoriesView: {
-    //flexDirection: 'row'
   }
 })

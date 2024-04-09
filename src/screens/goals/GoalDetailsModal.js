@@ -23,6 +23,8 @@ export default function GoalDetailsModal({goal, showModal, setShowModal}) {
     const [action, setAction] = useState('add');
     const [isDeletable, setIsDeletable] = useState(false)
 
+    const [inputError, setInputError] = useState(false);
+
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -44,24 +46,28 @@ export default function GoalDetailsModal({goal, showModal, setShowModal}) {
     }, [goal])
 
     const saveGoal = () => {
-        if (action === 'add') {
-            // Add new goal
-            dispatch(add({
-                id: Math.random(),
-                title: goalTitle,
-                priority: goalPriority,
-                finishDate: goalFinishDate
-            }));
-        } else if (action === 'edit') {
-            // Update existing goal
-            dispatch(update({
-                id: goal.id,
-                title: goalTitle,
-                priority: goalPriority,
-                finishDate: goalFinishDate
-            }));
+        if (goalTitle) {
+            if (action === 'add') {
+                // Add new goal
+                dispatch(add({
+                    id: Math.random(),
+                    title: goalTitle,
+                    priority: goalPriority,
+                    finishDate: goalFinishDate
+                }));
+            } else if (action === 'edit') {
+                // Update existing goal
+                dispatch(update({
+                    id: goal.id,
+                    title: goalTitle,
+                    priority: goalPriority,
+                    finishDate: goalFinishDate
+                }));
+            }
+            setShowModal(false);
+        } else {
+            setInputError(true);
         }
-        setShowModal(false);
     }
 
     const deleteGoal = () => {
@@ -87,15 +93,27 @@ export default function GoalDetailsModal({goal, showModal, setShowModal}) {
                             style={[styles.navigationTabView, {borderBottomColor: currentScreen === 1 ? colors.primary : 'grey'}]}
                             onPress={() => setCurrentScreen(1)}
                         >
-                            <Text>DETAILS</Text>
+                            <Text style={styles.navigationText}>
+                                {
+                                    goal ? (
+                                        'DETAILS'
+                                    ) : (
+                                        'NEW GOAL'
+                                    )
+                                }
+                            </Text>
                         </Pressable>
                         <View style={{borderRightWidth: 1, opacity: 0.4}}></View>
-                        <Pressable 
-                            style={[styles.navigationTabView, {borderBottomColor: currentScreen === 2 ? colors.primary : 'grey'}]}
-                            onPress={() => setCurrentScreen(2)}
-                        >
-                            <Text>MILESTONES</Text>
-                        </Pressable>
+                        {
+                            goal && (
+                                <Pressable 
+                                    style={[styles.navigationTabView, {borderBottomColor: currentScreen === 2 ? colors.primary : 'grey'}]}
+                                    onPress={() => setCurrentScreen(2)}
+                                >
+                                    <Text style={styles.navigationText}>MILESTONES</Text>
+                                </Pressable>
+                            )
+                        }
                     </View>
                     {
                         loading ? (
@@ -116,6 +134,8 @@ export default function GoalDetailsModal({goal, showModal, setShowModal}) {
                                             saveGoal={saveGoal}
                                             deleteGoal={deleteGoal}
                                             isDeletable={isDeletable}
+                                            inputError={inputError}
+                                            setInputError={setInputError}
                                         />
                                     ) : (
                                         <GoalMilestones goal={goal} />
@@ -139,6 +159,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
         flex: 1,
+        width: '100%',
         marginTop: 100,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
@@ -150,12 +171,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     navigationTabView: {
-        width: '50%',
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         borderBottomWidth: 2,
     },
     mainView: {
         flex: 1,
+    },
+    navigationText: {
+        letterSpacing: 0.9,
+        fontWeight: '700'
     }
 })
