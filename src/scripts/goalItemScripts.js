@@ -1,16 +1,17 @@
 import moment from 'moment';
 
 // Displays goals finish date
-export const calculateDate = (finishDate) => {
+export const displayTimeLeft = (finishDate) => {
   if (finishDate) {
     const date = moment(finishDate);
-    if (date.isBetween(moment().startOf('day'), moment().endOf('day'))) {
-      return date.fromNow(true);
-    } 
     if (date < moment()) {
-      return date.fromNow();
+      return '-';
     }
-    return date.fromNow(true);
+    return date.diff(new Date(), 'days') + ' days';
   }
-  return 'date not specified';
+  return 'Not specified';
+}
+
+export const displayMilestonesLeft = () => {
+  return '3 / 5'
 }

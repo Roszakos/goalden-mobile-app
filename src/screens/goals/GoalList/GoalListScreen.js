@@ -11,8 +11,10 @@ import GoalsCarousel from "../../../components/goals/GoalsCarousel";
 
 
 export default function GoalListScreen(props) {
-  const activeGoals = useSelector(state => state.activeGoals);
-  const finishedGoals = useSelector(state => state.finishedGoals);
+  const allGoals = useSelector(state => state.goals);
+  const allMilestones = useSelector(state => state.milestones);
+
+  const [showingActiveGoals, setShowingActiveGoals] = useState(true);
 
   const [highPriorityGoals, setHighPriorityGoals] = useState([]);
   const [lowPriorityGoals, setLowPriorityGoals] = useState([]);
@@ -34,8 +36,11 @@ export default function GoalListScreen(props) {
 
   useEffect(
     () => {
+      let goals;
       if (props.route.params.category === 1) {
-        const goals = activeGoals.list.slice();
+        setShowingActiveGoals(true);
+        goals = allGoals.list.map(goal => ({...goal}));
+        goals = goals.filter(goal => !goal.isFinished);
         goals.sort((a, b) => {
           if (a.finishDate < b.finishDate) {
             return -1;
@@ -44,11 +49,15 @@ export default function GoalListScreen(props) {
           }
           return 0;
         })
-        setLowPriorityGoals(goals.filter((goal) => goal.priority === 1))
-        setHighPriorityGoals(goals.filter((goal) => goal.priority === 3))
-        console.log(goals);
+        goals.forEach((goal) => {
+          let goalMilestones = allMilestones.list.filter(milestone => milestone.goalId === goal.id);
+          goal.totalMilestones = goalMilestones.length;
+          goal.finishedMilestones = goalMilestones.filter(milestone => milestone.isFinished).length;
+        })
       } else {
-        const goals = finishedGoals.list.slice();
+        setShowingActiveGoals(false);
+        goals = allGoals.list.map(goal => ({...goal}));
+        goals = goals.filter(goal => goal.isFinished);
         goals.sort((a, b) => {
           if (a.finishDate < b.finishDate) {
             return -1;
@@ -57,11 +66,11 @@ export default function GoalListScreen(props) {
           }
           return 0;
         })
-        setLowPriorityGoals(goals.filter((goal) => goal.priority === 1))
-        setHighPriorityGoals(goals.filter((goal) => goal.priority === 3))
       }
+      setLowPriorityGoals(goals.filter((goal) => goal.priority === 1))
+      setHighPriorityGoals(goals.filter((goal) => goal.priority === 3))
     }, 
-    [activeGoals, finishedGoals]
+    [allGoals, allMilestones]
   );
 
   useEffect(() => {
@@ -83,7 +92,7 @@ export default function GoalListScreen(props) {
               <Text variant="titleLarge" style={[styles.carouselLabel, {color: 'red'}]}>High priority</Text>
               {
                 highPriorityGoalsStatus == "" ? (
-                  <GoalsCarousel showGoalDetails={showGoalDetails} goals={highPriorityGoals}/>
+                  <GoalsCarousel showGoalDetails={showGoalDetails} goals={highPriorityGoals} showingActiveGoals={showingActiveGoals} />
                 ) : (
                   <Text style={{marginTop: 50}}>{highPriorityGoalsStatus}</Text>
                 )
@@ -94,7 +103,7 @@ export default function GoalListScreen(props) {
           <Text variant="titleLarge" style={[styles.carouselLabel, {color: 'orange'}]}>Low priority</Text>
           {
             lowPriorityGoalsStatus == "" ? (
-              <GoalsCarousel showGoalDetails={showGoalDetails} goals={lowPriorityGoals}/>
+              <GoalsCarousel showGoalDetails={showGoalDetails} goals={lowPriorityGoals} showingActiveGoals={showingActiveGoals} />
             ) : (
               <Text style={{marginTop: 50}}>{lowPriorityGoalsStatus}</Text>
             )

@@ -3,8 +3,10 @@ import { Dimensions, View, StyleSheet, Pressable } from 'react-native';
 import { Text, Icon, useTheme } from 'react-native-paper';
 import Carousel from 'react-native-reanimated-carousel';
 import { LinearGradient } from 'expo-linear-gradient';
+
+import { displayTimeLeft, displayMilestonesLeft } from '../../scripts/goalItemScripts';
  
-export default function GoalsCarousel({goals, showGoalDetails}) {
+export default function GoalsCarousel({goals, showGoalDetails, showingActiveGoals}) {
   const width = Dimensions.get('window').width;
   const { colors } = useTheme();
   const carousel = useRef();
@@ -45,28 +47,38 @@ export default function GoalsCarousel({goals, showGoalDetails}) {
 										{goals[index].title}
 									</Text>
 								</View>
-								<View style={[styles.bottomBar, {backgroundColor: colors.background, borderTopColor: colors.tertiary}]}>
-									<LinearGradient 
-										colors={['rgba(28,27,27,1)', 'rgba(33,20,42,1)', colors.darkerPrimary]}
-										locations={[0.2, 0.6, 0.8]}
-										start={[0, 1]}
-										end={[1, 0]}
-										style={styles.bottomBarLine}
-									>
-										<Text>Time Left</Text>
-										<Text>28 days</Text>
-									</LinearGradient>
-									<LinearGradient 
-										colors={['rgba(0,0,0,1)',  'rgba(33,20,42,1)', 'rgba(133,83,168,1)']}
-										locations={[0.2, 0.6, 0.8]}
-										start={[0, 1]}
-										end={[1, 0]}
-										style={styles.bottomBarLine}
-									>
-										<Text>Milestones</Text>
-										<Text>3 / 5</Text>
-									</LinearGradient>
-								</View>
+								{
+									showingActiveGoals ? (
+										<View style={[styles.bottomBar, {backgroundColor: colors.background, borderTopColor: colors.tertiary}]}>
+											<LinearGradient 
+												colors={['rgba(28,27,27,1)', 'rgba(33,20,42,1)', colors.darkerPrimary]}
+												locations={[0.2, 0.6, 0.8]}
+												start={[0, 1]}
+												end={[1, 0]}
+												style={styles.bottomBarLine}
+											>
+												<Text style={styles.bottomBarText}>Time Left</Text>
+												<Text style={styles.bottomBarText}>{displayTimeLeft(goals[index].finishDate)}</Text>
+											</LinearGradient>
+											<LinearGradient 
+												colors={['rgba(0,0,0,1)',  'rgba(33,20,42,1)', 'rgba(133,83,168,1)']}
+												locations={[0.2, 0.6, 0.8]}
+												start={[0, 1]}
+												end={[1, 0]}
+												style={styles.bottomBarLine}
+											>
+												<Text style={styles.bottomBarText}>Milestones</Text>
+												<Text style={styles.bottomBarText}>
+													{goals[index].finishedMilestones + ' / ' + goals[index].totalMilestones} 
+												</Text>
+											</LinearGradient>
+										</View>
+									) : (
+										<View style={[styles.bottomBarReached, {backgroundColor: '#19bd47', borderTopColor: colors.tertiary}]}>
+											<Text style={styles.goalReachedText}>REACHED</Text>
+										</View>
+									)
+								}
 							</View>
 						</Pressable>
 					</View>
@@ -100,6 +112,7 @@ const styles = StyleSheet.create({
   topBar: {
 	flex: 1,
 	alignItems: 'center',
+	justifyContent: 'center',
 	padding: 14
   },
   cardContent: {
@@ -114,6 +127,24 @@ const styles = StyleSheet.create({
 	paddingHorizontal: 10,
 	flexDirection: 'row',
 	justifyContent: 'space-between',
-  }
+  },
+  bottomBarText: {
+	fontFamily: 'Josefin'
+  },
+  goalTitle: {
+	fontFamily: 'Josefin',
+	fontSize: 20
+  },
+  bottomBarReached: {
+	borderTopWidth: 1,
+	padding: 15,
+	justifyContent: 'center',
+	alignItems: 'center'
+  },
+  goalReachedText: {
+	fontFamily: 'Josefin',
+	fontSize: 20,
+	letterSpacing: 1
+  },
 });
  

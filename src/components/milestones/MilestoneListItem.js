@@ -42,7 +42,6 @@ export default function MilestoneListItem({milestone}) {
             isFinished: isFinished,
             createdAt: milestone.createdAt
         }))
-        setEditing(false);
     }
 
     return (
