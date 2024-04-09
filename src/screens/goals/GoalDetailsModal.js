@@ -8,7 +8,7 @@ import GoalDetails from './GoalDetails';
 import GoalMilestones from './GoalMilestones';
 
 // Store actions
-import { add, destroy, update } from '../../features/goals/activeGoalsSlice';
+import { add, destroy, update } from '../../features/goals/goalsSlice';
 
 export default function GoalDetailsModal({goal, showModal, setShowModal, currentScreen, setCurrentScreen}) {
     const {colors} = useTheme();
@@ -17,6 +17,7 @@ export default function GoalDetailsModal({goal, showModal, setShowModal, current
     const [goalTitle, setGoalTitle] = useState('');
     const [goalFinishDate, setGoalFinishDate] = useState(null);
     const [goalPriority, setGoalPriority] = useState(1);
+    const [goalFinished, setGoalFinished] = useState(false);
 
     const [action, setAction] = useState('add');
     const [isDeletable, setIsDeletable] = useState(false)
@@ -31,6 +32,7 @@ export default function GoalDetailsModal({goal, showModal, setShowModal, current
             setGoalTitle(goal.title);
             setGoalFinishDate(goal.finishDate);
             setGoalPriority(goal.priority);
+            setGoalFinished(goal.isFinished);
             setAction('edit');
             setIsDeletable(true);
         } else {
@@ -51,13 +53,15 @@ export default function GoalDetailsModal({goal, showModal, setShowModal, current
                     id: Math.random(),
                     title: goalTitle,
                     priority: goalPriority,
-                    finishDate: goalFinishDate
+                    isFinished: false,
+                    finishDate: goalFinishDate,
                 }));
             } else if (action === 'edit') {
                 // Update existing goal
                 dispatch(update({
                     id: goal.id,
                     title: goalTitle,
+                    isFinished: goalFinished,
                     priority: goalPriority,
                     finishDate: goalFinishDate
                 }));
@@ -66,6 +70,17 @@ export default function GoalDetailsModal({goal, showModal, setShowModal, current
         } else {
             setInputError(true);
         }
+    }
+
+    const changeGoalFinishedState = (finishedState) => {
+        setGoalFinished(finishedState);
+        dispatch(update({
+            id: goal.id,
+            title: goal.title,
+            isFinished: finishedState,
+            priority: goal.priority,
+            finishDate: goal.finishDate,
+        }))
     }
 
     const deleteGoal = () => {
@@ -134,6 +149,8 @@ export default function GoalDetailsModal({goal, showModal, setShowModal, current
                                             isDeletable={isDeletable}
                                             inputError={inputError}
                                             setInputError={setInputError}
+                                            isFinished={goalFinished}
+                                            changeFinished={changeGoalFinishedState}
                                         />
                                     ) : (
                                         <GoalMilestones goal={goal} />

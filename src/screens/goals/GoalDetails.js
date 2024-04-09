@@ -13,7 +13,8 @@ export default function GoalDetails({
         goalPriority, setGoalPriority, 
         saveGoal, deleteGoal,
         inputError, setInputError,
-        isDeletable
+        isFinished, changeFinished,
+        isDeletable,
     }) {
     const {colors} = useTheme();
 
@@ -22,6 +23,32 @@ export default function GoalDetails({
             <FormTextInput labelText="Goal title" value={goalTitle} updateState={setGoalTitle} error={inputError} setError={setInputError}/>
             <PriorityPicker goalPriority={goalPriority} setGoalPriority={setGoalPriority} />
             <FinishDatePicker goalFinishDate={goalFinishDate} setGoalFinishDate={setGoalFinishDate}/>
+            {
+                isDeletable && (
+                    <View style={{width: '100%', marginTop: 30}}>
+                    <Text style={{fontFamily: 'Josefin'}}>
+                        Click to change
+                    </Text>
+                    {
+                        isFinished ? (
+                            <Pressable 
+                                style={[styles.goalReachedButton, {backgroundColor: '#19bd47'}]}
+                                onPress={() => changeFinished(false)}
+                            >
+                                <Text style={styles.goalReachedButtonText}>GOAL REACHED</Text>
+                            </Pressable>
+                        ) : (
+                            <Pressable 
+                                style={[styles.goalReachedButton, {backgroundColor: '#b8122e'}]}
+                                onPress={() => changeFinished(true)}
+                            >
+                                <Text style={styles.goalReachedButtonText}>GOAL NOT REACHED YET</Text>
+                            </Pressable>
+                        )
+                    }
+                    </View>
+                )
+            }
             <View style={styles.buttonContainer}>
                 {
                     isDeletable && (
@@ -65,5 +92,15 @@ const styles = StyleSheet.create({
         padding: 15,
         paddingHorizontal: 20,
         fontFamily: 'Josefin'
+    },
+    goalReachedButton: {
+        marginTop: 5,
+        padding: 15,
+        width: '100%',
+        alignItems: 'center'
+    },
+    goalReachedButtonText: {
+        fontFamily: 'Josefin',
+        fontSize: 20,
     }
 })
