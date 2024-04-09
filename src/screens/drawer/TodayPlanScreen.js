@@ -1,110 +1,99 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import { Text } from 'react-native-paper';
 import moment from 'moment';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AddNewTaskButton from '../../components/day-plan/AddNewTaskButton';
-import { TodayPlanContext } from '../../contexts/TodayPlanContext';
 import TaskListItem from '../../components/day-plan/TaskListItem';
 import DateDisplay from '../../components/DateDisplay';
 import { storeDayPlans, getDayPlans, searchForPlanToRepeat, sortTasks, setTaskNotification } from '../../scripts/dayPlanScripts';
 import PlanRepeatModal from '../../components/day-plan/PlanRepeatModal';
 import { cancelNotification } from '../../scripts/notificationScripts';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { set as setTasks, add as addTask, update, destroy} from '../../features/tasks/tasksSlice';
+import { set as setLatestPlanDate } from '../../features/tasks/latestPlanDateSlice';
+import { add as addPreviousPlan } from '../../features/tasks/previousDaysTasksSlice';
 
 
 export default function DailyPlanScreen(props) {
-  const { tasks, setTasks, getTodayTasks, storeTodayTasks, getLatestPlanDate, storeLatestPlanDate } = useContext(TodayPlanContext);
+  //const { tasks, setTasks, getTodayTasks, storeTodayTasks, getLatestPlanDate, storeLatestPlanDate } = useContext(TodayPlanContext);
+  const dispatch = useDispatch();
+
+  const tasks = useSelector(state => state.tasks);
+  const latestPlanDate = useSelector(state => state.latestPlanDate);
+  const previousDaysTasks = useSelector(state => state.previousDaysTasks);
+
+  const todaysDate = moment().format('dddd') + ', ' + moment().format('DD - MM - YYYY')
+
   const [finishedActivities, setFinishedActivities] = useState([]);
   const [unfinishedActivities, setUnfinishedActivities] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [repeatablePlans, setRepeatablePlans] = useState([]);
 
   useEffect(() => {
-    getLatestPlanDate().then((latestPlanDate) => {
-      getTodayTasks().then((tasks) => {
         if (!latestPlanDate || latestPlanDate < moment().format(moment.HTML5_FMT.DATE)) {
           if (tasks.length && latestPlanDate) {
-            getDayPlans().then((newDayPlans) => {
-              newDayPlans.push({
-                date: latestPlanDate,
-                tasks: tasks
-              })
+            dispatch(addPreviousPlan({
+              date: latestPlanDate,
+              tasks: tasks
+            }))
 
-              const availablePlans = searchForPlanToRepeat(newDayPlans);
-              if (availablePlans) {
-                setRepeatablePlans(availablePlans);
-                setShowModal(true);
-              }
-              setTasks([]);
-              storeDayPlans(newDayPlans);
-            })
+            const availablePlans = searchForPlanToRepeat(previousDaysTasks);
+            if (availablePlans) {
+              setRepeatablePlans(availablePlans);
+              setShowModal(true);
+            }
+            dispatch(setTasks([]));
           } else {
-            storeLatestPlanDate(moment().format(moment.HTML5_FMT.DATE));
-            storeTodayTasks([]);
-            setTasks([]);
+            //storeLatestPlanDate(moment().format(moment.HTML5_FMT.DATE));
+            dispatch(setLatestPlanDate(moment().format(moment.HTML5_FMT.DATE)))
+            dispatch(setTasks([]));
           }
         } else {
-          setTasks(tasks);
+          dispatch(setTasks([]));
         }
-      })
-    })
-    
   }, []);
 
   useEffect(() => {
-    const sorted = sortTasks(tasks);
+    const sorted = sortTasks(tasks.list);
     setFinishedActivities(sorted[0]);
     setUnfinishedActivities(sorted[1]);
   }, [tasks])
 
-  const markTaskFinished = (task) => {
-    const taskIndex = tasks.indexOf(task);
-    const changedTasks = tasks.slice();
-    changedTasks[taskIndex].isDone = true;
-
-    setTasks(changedTasks);
-    storeTodayTasks(changedTasks);
-  }
-
-  const markTaskUnfinished = (task) => {
-    const taskIndex = tasks.indexOf(task);
-    const changedTasks = tasks.slice();
-    changedTasks[taskIndex].isDone = false;
-
-    setTasks(changedTasks);
-    storeTodayTasks(changedTasks);
+  const changeFinishState = (task, finishState) => {
+    dispatch(update({
+      id: task.id,
+      task: task.task,
+      time: task.time,
+      isFinished: finishState
+    }))
   }
 
   const deleteTask = (task) => {
-    const changedTasks = tasks.slice();
-    changedTasks.splice(tasks.indexOf(task), 1);
     cancelNotification(task.id);
-
-    setTasks(changedTasks);
-    storeTodayTasks(changedTasks);
+    dispatch(destroy(task));
   }
 
   const modalSelectedOption = (option) => {
     storeLatestPlanDate(moment().format(moment.HTML5_FMT.DATE));
     switch (option) {
       case 1:
-        setTasks(repeatablePlans[0]);
-        storeTodayTasks(repeatablePlans[0]);
+        dispatch(setTasks(repeatablePlans[0]))
         repeatablePlans[0].forEach((task) => {
           setTaskNotification(task);
         })
         break;
       case 2:
-        setTasks(repeatablePlans[1]);
-        storeTodayTasks(repeatablePlans[1]);
+        dispatch(setTasks(repeatablePlans[0]))
         repeatablePlans[1].forEach((task) => {
           setTaskNotification(task);
         })
         break;
       case 3:
-        storeTodayTasks([]);
+        dispatch(setTasks([]))
         break;
       default:
-        storeTodayTasks([]);
+        dispatch(setTasks([]))
         break;
     }
   }
@@ -120,7 +109,7 @@ export default function DailyPlanScreen(props) {
       />
       <View style={styles.headerDateView}>
         <Text style={styles.headerDateText}>
-          <DateDisplay date={Date.now()}/>
+          { moment().format('dddd') + ', ' + moment().format('DD-MM-YYYY') }
         </Text>
       </View>
       {
@@ -187,10 +176,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   headerDateView: {
-    alignItems: 'center',
-    paddingVertical: 10
+    paddingVertical: 10,
+    paddingLeft: 10
   },
   headerDateText: {
-    fontSize: 20
+    fontSize: 17
   }
 });

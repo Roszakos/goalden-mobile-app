@@ -1,14 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const tasksSlice = createSlice({
-  name: 'tasks',
+export const previousDaysTasksSlice = createSlice({
+  name: 'previousDaysTasks',
   initialState: {
     list: []
   },
   reducers: {
-    set: (state, action) => {
-      state.list = action.payload;
-    },
     add: (state, action) => {
       state.list.push(action.payload);
     },
@@ -22,6 +19,6 @@ export const tasksSlice = createSlice({
   }
 })
 
-export const { set, add, destroy, update } = tasksSlice.actions;
+export const { add, destroy, update } = previousDaysTasksSlice.actions;
 
-export default tasksSlice.reducer
+export default previousDaysTasksSlice.reducer

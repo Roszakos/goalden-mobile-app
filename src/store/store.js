@@ -14,6 +14,8 @@ import {
 import goalsReducer from '../features/goals/goalsSlice';
 import milestonesReducer from '../features/goals/milestonesSlice';
 import tasksReducer from '../features/tasks/tasksSlice';
+import latestPlanDateSlice from '../features/tasks/latestPlanDateSlice';
+import previousDaysTasksSlice from '../features/tasks/previousDaysTasksSlice';
 
 // Storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,7 +28,9 @@ const persistConfig = {
 const rootReducer = combineReducers({
 	goals: goalsReducer,
 	milestones: milestonesReducer,
-	tasks: tasksReducer
+	tasks: tasksReducer,
+  latestPlanDate: latestPlanDateSlice,
+  previousDaysTasks: previousDaysTasksSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
