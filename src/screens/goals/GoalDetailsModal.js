@@ -10,11 +10,9 @@ import GoalMilestones from './GoalMilestones';
 // Store actions
 import { add, destroy, update } from '../../features/goals/activeGoalsSlice';
 
-export default function GoalDetailsModal({goal, showModal, setShowModal}) {
+export default function GoalDetailsModal({goal, showModal, setShowModal, currentScreen, setCurrentScreen}) {
     const {colors} = useTheme();
     const dispatch = useDispatch();
-
-    const [currentScreen, setCurrentScreen] = useState(1);
 
     const [goalTitle, setGoalTitle] = useState('');
     const [goalFinishDate, setGoalFinishDate] = useState(null);

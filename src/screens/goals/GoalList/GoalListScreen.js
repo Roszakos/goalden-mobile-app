@@ -22,6 +22,7 @@ export default function GoalListScreen(props) {
 
   const [editGoal, setEditGoal] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [currentModalScreen, setCurrentModalScreen] = useState(1);
 
   const imageSrc = require('../../../../assets/goalden-background.webp');
   const theme = useTheme();
@@ -99,8 +100,14 @@ export default function GoalListScreen(props) {
             )
           }
         </View>
-        <GoalDetailsModal goal={editGoal} showModal={showModal} setShowModal={setShowModal} />
-        <AddNewGoalButton showGoalDetails={showGoalDetails} />
+        <GoalDetailsModal 
+          goal={editGoal} 
+          showModal={showModal} 
+          setShowModal={setShowModal} 
+          currentScreen={currentModalScreen} 
+          setCurrentScreen={setCurrentModalScreen}
+        />
+        <AddNewGoalButton showGoalDetails={showGoalDetails} setScreen={setCurrentModalScreen} />
       </View>
     </ImageBackground>
   );

@@ -2,13 +2,14 @@ import { StyleSheet, View, TouchableHighlight } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import React from 'react';
 
-export default function AddNewGoalButton({showGoalDetails}) {
+export default function AddNewGoalButton({showGoalDetails, setScreen}) {
   const { colors } = useTheme();
   return (
     <View style={styles.buttonContainer}>
       <TouchableHighlight 
         style={styles.buttonTouchable} 
         onPress={() => { 
+          setScreen(1);
           showGoalDetails(null);
         }}>
         <View style={[styles.button, {backgroundColor: colors.tertiary}]} >
