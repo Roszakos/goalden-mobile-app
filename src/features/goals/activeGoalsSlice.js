@@ -10,7 +10,8 @@ export const activeGoalsSlice = createSlice({
       state.list.push(action.payload);
     },
     destroy: (state, action) => {
-      state.list.splice(state.list.indexOf(action.payload), 1);
+      const toDelete = state.list.find(element => element.id == action.payload.id);
+      state.list.splice(state.list.indexOf(toDelete), 1);
     },
     update: (state, action) => {
       state.list[state.list.indexOf(state.list.find((element) => element.id == action.payload.id))] = action.payload;
