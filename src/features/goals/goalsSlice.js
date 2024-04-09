@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const finishedGoalsSlice = createSlice({
-  name: 'finishedGoals',
+export const goalsSlice = createSlice({
+  name: 'goals',
   initialState: {
     list: []
   },
@@ -19,6 +19,6 @@ export const finishedGoalsSlice = createSlice({
   }
 })
 
-export const { add, destroy, update } = finishedGoalsSlice.actions;
+export const { add, destroy, update } = goalsSlice.actions;
 
-export default finishedGoalsSlice.reducer
+export default goalsSlice.reducer

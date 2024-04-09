@@ -11,9 +11,7 @@ import {
 } from 'redux-persist'
 
 // Reducers
-import activeGoalsReducer from '../features/goals/activeGoalsSlice';
-import finishedGoalsReducer from '../features/goals/finishedGoalsSlice';
-import lastGoalIdReducer from '../features/goals/lastGoalIdSlice';
+import goalsReducer from '../features/goals/goalsSlice';
 import milestonesReducer from '../features/goals/milestonesSlice';
 import tasksReducer from '../features/tasks/tasksSlice';
 
@@ -26,9 +24,7 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-	activeGoals: activeGoalsReducer,
-	finishedGoals: finishedGoalsReducer,
-	lastGoalId: lastGoalIdReducer,
+	goals: goalsReducer,
 	milestones: milestonesReducer,
 	tasks: tasksReducer
 });
