@@ -45,7 +45,7 @@ export const searchForPlanToRepeat = (plans) => {
 
 export const sortTasks = (tasks) => {
   let sortedTasks = [];
-  sortedTasks[0] = tasks.filter((item) => item.isDone);
+  sortedTasks[0] = tasks.filter((item) => item.isFinished);
   sortedTasks[0].sort((a, b) => {
       if (parseInt(a.time) < parseInt(b.time)) {
         return -1;
@@ -55,7 +55,7 @@ export const sortTasks = (tasks) => {
       return 0;
     })
 
-  sortedTasks[1] = tasks.filter((item) => !item.isDone);
+  sortedTasks[1] = tasks.filter((item) => !item.isFinished);
   sortedTasks[1].sort((a, b) => {
     if (parseInt(a.time) < parseInt(b.time)) {
       return -1;

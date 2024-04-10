@@ -1,133 +1,78 @@
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
-import React from 'react'
-import { FontAwesome5 } from '@expo/vector-icons';
+import { StyleSheet, View, Pressable } from 'react-native';
+import { Text, Icon, useTheme} from 'react-native-paper';
+import React from 'react';
+import moment from 'moment';
 
-export default function TaskListItem({navigation, task, taskAction, deleteTask}) {
-
-  const displayTime = (time) => {
-    if (time != 0) {
-      const hours = parseInt(time[0] + time[1]);
-      const minutes = time[2] + time[3];
-      return hours + ':' + minutes;
-    } 
-    return '0:00';
-  }
-
+export default function TaskListItem({task, changeFinishState, showTaskDetails}) {
+  const { colors } = useTheme();
   return (
-    <View>
-      <TouchableHighlight 
-        style={styles.listItemTouchable}
+      <Pressable 
+        style={[styles.container, {backgroundColor: colors.lighterBackground}]}
         onPress={() => {
-          navigation.navigate('AddNewTask', { headerTitle: 'Edit task', action: 'edit', task: task })
-        }}
+          showTaskDetails(task);
+        }}  
       >
-        <View style={[styles.listItemContainer, {backgroundColor: task.isDone ? '#d4ac3f' : '#1ed463'}]}>
-          <View style={styles.listItemTimeView}>
-            <Text style={styles.listItemTimeText}>
-              {displayTime(task.time)}
+          {
+            task.isFinished ? (
+              <Pressable 
+                style={styles.checkbox}
+                onPress={() => {
+                  changeFinishState(task, false);
+                }}
+              >
+                <Icon source="checkbox-marked-outline" size={40} color="#30b02c"/>
+              </Pressable>
+            ) : (
+              <Pressable 
+                style={styles.checkbox}
+                onPress={() => {
+                  changeFinishState(task, true);
+                }}
+              >
+                <Icon source="checkbox-blank-outline" size={40} />
+              </Pressable>
+            )
+          }
+          <View style={styles.taskTitleView}>
+            <Text>
+              {task.task}
             </Text>
           </View>
-          <View style={styles.taskRightView}>
-            <View style={styles.listItemTitleView}>
-              <Text style={styles.listItemTitleText}>{task.title}</Text>
-            </View>
-            <View style={styles.taskActionsView}>
-              <TouchableHighlight
-                style={styles.taskDoneButtonTouchable}
-                onPress={() => {
-                  taskAction(task);
-                }}
-              >
-                <View style={[styles.taskDoneButtonView, {backgroundColor: task.isDone ? '#16ba1f' : '#cfad63'}]}>
-                  <Text>
-                    {
-                      task.isDone ? 'REVIVE' : 'DONE'
-                    }
-                  </Text>
-                </View>
-              </TouchableHighlight>
-              <TouchableHighlight 
-                style={styles.taskDeleteTouchable}
-                onPress={() => {
-                  deleteTask(task);
-                }}
-              >
-                <View style={styles.taskDeleteView}>
-                  <FontAwesome5 
-                    name="trash-alt" 
-                    size={24} 
-                    color="black" 
-                  />
-                </View>
-              </TouchableHighlight>
-            </View>
+          <View style={[styles.taskTimeView, {borderColor: colors.background}]}>
+            <Text>
+              {
+                task.time ? moment(task.time).format('HH:mm') : '-'
+              }
+            </Text>
           </View>
-        </View>
-      </TouchableHighlight>
-    </View>
+      </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
-    listItemTouchable: {
+  container: {
     marginTop: 10,
-  },
-  listItemContainer: {
     width: '100%',
+    minHeight: 60,
     flexDirection: 'row',
-    minHeight: 70,
+    gap: 6,
     backgroundColor: 'green',
-    paddingVertical: 10
-  },
-  listItemTimeView: {
-    justifyContent: 'center',
     alignItems: 'center',
-    borderRightWidth: 1,
-    width: 90,
+    justifyContent: 'space-between'
   },
-  listItemTimeText: {
-    fontSize: 24,
-    fontWeight: '600',
+  taskTitleView: {
+    flex: 1
   },
-  listItemTitleView: {
+  checkbox: {
+    padding: 6,
+    paddingRight: 0
+  },
+  taskTimeView: {
+    alignSelf: 'stretch',
+    padding: 6,
+    width: 60,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 6
-  },
-  listItemTitleText: {
-    fontSize: 16,
-  },
-  taskRightView: {
-    flex: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  taskDoneButtonView: {
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  taskDoneButtonTouchable: {
-    marginRight: 6,
-    flexDirection: 'row',
-    alignItems: 'stretch',
-  },
-  taskActionsView: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    height: '100%',
-    gap: 4,
-    marginRight: 10
-  },
-  taskDeleteTouchable: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
-  },
-  taskDeleteView: {
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 10
+    borderLeftWidth: 2
   }
 })

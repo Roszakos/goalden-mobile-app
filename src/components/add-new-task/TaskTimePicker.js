@@ -5,42 +5,41 @@ import moment from 'moment';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function DatePicker({goalFinishDate, setGoalFinishDate}) {
+export default function TaskTimePicker({taskTime, setTaskTime}) {
   const { colors } = useTheme();
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
-  const onChange = (event, selectedDate) => {
+  const onChange = (event, selectedTime) => {
     if (event.type === 'set') {
-        setGoalFinishDate(moment(selectedDate).valueOf());
+        setTaskTime(moment(selectedTime).valueOf());
     }
-    setShowDatePicker(false);
+    setShowTimePicker(false);
   }
 
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
-        <Text style={styles.label}>Finish date</Text>
+        <Text style={styles.label}>Time</Text>
         <Pressable
             style={styles.pickDateButton}
-            onPress={() => setShowDatePicker(true)}
+            onPress={() => setShowTimePicker(true)}
         >
             {
-                goalFinishDate ? (    
+                taskTime ? (    
                     <Text>
-                        {moment(goalFinishDate).format('D-M-YYYY')}
+                        {moment(taskTime).format('HH:mm')}
                     </Text>
                 ) : (
-                    <Text>Select date</Text>
+                    <Text>Select time</Text>
                 )
             }
             
         </Pressable>
         {
-            showDatePicker && (
+            showTimePicker && (
                 <DateTimePicker 
-                    mode="date"
+                    mode="time"
                     display="spinner" 
-                    minimumDate={new Date()}
-                    value={goalFinishDate ? new Date(goalFinishDate) : new Date()}
+                    value={taskTime ? new Date(taskTime) : new Date()}
                     onChange={onChange}
                 />
             )
